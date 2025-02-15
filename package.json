@@ -2,13 +2,21 @@
 	"name": "typed-mongo",
 	"module": "src/index.ts",
 	"type": "module",
+	"scripts": {
+		"type-check": "tsc",
+		"pg:type-check": "cd playground && tsc || exit 1 && cd -"
+	},
 	"devDependencies": {
-		"@types/bun": "latest",
-		"@biomejs/biome": "^1.9.4"
+		"@biomejs/biome": "^1.9.4",
+		"@types/bun": "latest"
 	},
 	"peerDependencies": {
 		"typescript": "^5.0.0",
 		"mongodb": "^6.13.0",
 		"type-fest": "^4.33.0"
-	}
+	},
+	"dependencies": {
+		"@faker-js/faker": "^9.5.0"
+	},
+	"trustedDependencies": ["@biomejs/biome"]
 }

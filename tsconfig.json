@@ -1,15 +1,13 @@
 {
 	"compilerOptions": {
-		// Enable latest features
 		"lib": ["ESNext"],
 		"target": "ESNext",
 		"module": "ESNext",
 
 		"types": [],
-		"skipLibCheck": false,
+		"skipLibCheck": true,
 
-		// Bundler mode
-		"moduleResolution": "nodenext",
+		"moduleResolution": "bundler",
 		"allowImportingTsExtensions": true,
 		"verbatimModuleSyntax": true,
 		"noEmit": true,
@@ -24,5 +22,7 @@
 		"noPropertyAccessFromIndexSignature": true,
 		"exactOptionalPropertyTypes": true,
 		"forceConsistentCasingInFileNames": true
-	}
+	},
+	"include": ["src"],
+	"exclude": ["playground"]
 }

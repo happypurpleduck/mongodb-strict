@@ -22,7 +22,8 @@
 			"recommended": true,
 			"complexity": {
 				"recommended": true,
-				"noBannedTypes": "off"
+				"noBannedTypes": "off",
+				"useLiteralKeys": "off"
 			},
 			"suspicious": {
 				"recommended": true,

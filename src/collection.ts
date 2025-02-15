@@ -2,7 +2,6 @@ import type {
 	BulkWriteOptions,
 	Collection,
 	DeleteOptions,
-	Document,
 	Filter,
 	FindOneAndDeleteOptions,
 	FindOneAndReplaceOptions,
@@ -14,8 +13,9 @@ import type {
 	UpdateOptions,
 	WithoutId,
 } from "mongodb";
+import type { TDocument } from "./document";
 
-export class TypedCollection<T extends Document> {
+export class TypedCollection<T extends TDocument> {
 	collection: Collection<T>;
 
 	constructor(collection: Collection<T>) {
