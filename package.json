@@ -13,7 +13,7 @@
 	"peerDependencies": {
 		"typescript": "^5.0.0",
 		"mongodb": "^6.13.0",
-		"type-fest": "^4.33.0"
+		"type-fest": "^4.34.1"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^9.5.0"
