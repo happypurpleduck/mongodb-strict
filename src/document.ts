@@ -1,5 +1,5 @@
 import type { ObjectId, Document } from "mongodb";
 
-export interface TDocument extends Document {
+export interface TDocument {
 	_id: ObjectId;
 }
