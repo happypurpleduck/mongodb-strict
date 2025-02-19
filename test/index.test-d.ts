@@ -1,5 +1,5 @@
-import type { Paths } from "../src/type-fest/path.ts";
-import type { Get } from "../src/type-fest/get.ts";
+import type { Paths } from "../src/types/path.ts";
+import type { Get } from "../src/types/get.ts";
 import type { TItem } from "./item.ts";
 import { expectType } from "tsd";
 
