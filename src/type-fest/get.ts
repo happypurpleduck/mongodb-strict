@@ -1,10 +1,9 @@
-import type { Paths, Split, StringKeyOf } from "type-fest";
-import type { StringDigit, ToString } from "type-fest/source/internal";
-import type { LiteralStringUnion } from "type-fest/source/literal-union";
+import type { Split, StringKeyOf, UnknownArray } from "type-fest";
+import type { StringDigit } from "type-fest/source/internal";
 
-type GetOptions = {
+interface GetOptions {
 	strict?: boolean;
-};
+}
 
 type GetWithPath<
 	BaseType,
@@ -13,11 +12,25 @@ type GetWithPath<
 > = Keys extends readonly []
 	? BaseType
 	: Keys extends readonly [infer Head, ...infer Tail]
-		? GetWithPath<
-				PropertyOf<BaseType, Extract<Head, string>, Options>,
-				Extract<Tail, string[]>,
-				Options
-			>
+		? Head extends `${number}`
+			? GetWithPath<
+					PropertyOf<BaseType, Extract<Head, string>, Options>,
+					Extract<Tail, string[]>,
+					Options
+				>
+			: BaseType extends UnknownArray
+				? Array<
+						GetWithPath<
+							PropertyOf<BaseType, Extract<Head, string>, Options>,
+							Extract<Tail, string[]>,
+							Options
+						>
+					>
+				: GetWithPath<
+						PropertyOf<BaseType, Extract<Head, string>, Options>,
+						Extract<Tail, string[]>,
+						Options
+					>
 		: never;
 
 type Strictify<
@@ -35,16 +48,7 @@ type StrictPropertyOf<
 		: BaseType[Key]
 	: BaseType[Key];
 
-type ToPath<S extends string> = Split<FixPathSquareBrackets<S>, ".">;
-
-type FixPathSquareBrackets<Path extends string> =
-	Path extends `[${infer Head}]${infer Tail}`
-		? Tail extends `[${string}`
-			? `${Head}.${FixPathSquareBrackets<Tail>}`
-			: `${Head}${FixPathSquareBrackets<Tail>}`
-		: Path extends `${infer Head}[${infer Middle}]${infer Tail}`
-			? `${Head}.${FixPathSquareBrackets<`[${Middle}]${Tail}`>}`
-			: Path;
+type ToPath<S extends string> = Split<S, ".">;
 
 type ConsistsOnlyOf<
 	LongString extends string,
@@ -80,7 +84,7 @@ type PropertyOf<
 					: Key extends keyof BaseType
 						? Strictify<BaseType[Key & keyof BaseType], Options>
 						: unknown
-				: unknown
+				: PropertyOf<BaseType[number], Key, Options>
 			: BaseType extends {
 						[n: number]: infer Item;
 						length: number;
@@ -90,17 +94,10 @@ type PropertyOf<
 					: unknown
 				: Key extends keyof WithStringKeys<BaseType>
 					? StrictPropertyOf<WithStringKeys<BaseType>, Key, Options>
-					: unknown;
+					: never;
 
 export type Get<
 	BaseType,
-	Path extends
-		| readonly string[]
-		| LiteralStringUnion<
-				ToString<
-					| Paths<BaseType, { bracketNotation: false; maxRecursionDepth: 2 }>
-					| Paths<BaseType, { bracketNotation: true; maxRecursionDepth: 2 }>
-				>
-		  >,
+	Path extends string,
 	Options extends GetOptions = {},
-> = GetWithPath<BaseType, Path extends string ? ToPath<Path> : Path, Options>;
+> = GetWithPath<BaseType, ToPath<Path>, Options>;
