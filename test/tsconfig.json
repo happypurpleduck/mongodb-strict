@@ -3,6 +3,6 @@
 	"compilerOptions": {
 		"types": null
 	},
-	"include": ["."],
+	"include": [".", "../src"],
 	"exclude": []
 }
