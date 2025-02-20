@@ -11,7 +11,7 @@ import type {
 
 export type OmitDeep<T, PathUnion extends string> = SimplifyDeep<
 	OmitDeepHelper<T, UnionToTuple<PathUnion>>,
-	UnknownArray
+	UnknownArray | ExtendedPrimitive
 >;
 
 type OmitDeepHelper<T, PathTuple extends UnknownArray> = PathTuple extends [
