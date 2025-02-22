@@ -1,0 +1,129 @@
+import type { Decimal128, ObjectId } from "mongodb";
+import { expectTypeOf } from "vitest";
+import type { TItem } from "../../test/item";
+import type { PickDeep } from "./pick-deep";
+
+expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<never>();
+
+expectTypeOf<PickDeep<TItem, "_id">>().toEqualTypeOf<{
+	_id: ObjectId;
+}>();
+
+expectTypeOf<PickDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
+	_id: ObjectId;
+	name: {
+		en: string;
+	};
+}>();
+
+expectTypeOf<
+	PickDeep<TItem, "_id" | "name.en" | "options.name.en">
+>().toEqualTypeOf<{
+	_id: ObjectId;
+	name: {
+		en: string;
+	};
+	options: Array<{
+		name: {
+			en: string;
+		};
+	}>;
+}>();
+
+expectTypeOf<
+	PickDeep<
+		| {
+				_id: ObjectId;
+		  }
+		| ({
+				type: 1;
+				value1: ObjectId;
+		  } & {
+				type: 2;
+				value2: ObjectId;
+		  }),
+		"_id"
+	>
+>().toEqualTypeOf<{
+	_id: ObjectId;
+}>();
+
+expectTypeOf<
+	PickDeep<
+		| {
+				_id: ObjectId;
+		  }
+		| ({
+				type: 1;
+				value1: ObjectId;
+		  } & {
+				type: 2;
+				value2: ObjectId;
+		  }),
+		"type"
+	>
+>().toEqualTypeOf<{
+	type: 1 | 2;
+}>();
+
+expectTypeOf<
+	PickDeep<
+		| {
+				_id: ObjectId;
+		  }
+		| ({
+				type: 1;
+				value1: ObjectId;
+		  } & {
+				type: 2;
+				value2: ObjectId;
+		  }),
+		"type" | "value1" | "value2"
+	>
+>().toEqualTypeOf<{
+	type: 1 | 2;
+	value1?: ObjectId;
+	value2?: ObjectId;
+}>();
+
+expectTypeOf<
+	PickDeep<
+		| {
+				_id: ObjectId;
+		  }
+		| ({
+				type: 1;
+				value1: ObjectId;
+		  } & {
+				type: 2;
+				value2: ObjectId;
+		  }),
+		"type" | "value1" | "value2"
+	>
+>().toEqualTypeOf<{
+	type: 1 | 2;
+	value1?: ObjectId;
+	value2?: ObjectId;
+}>();
+
+expectTypeOf<
+	PickDeep<
+		{
+			_id: ObjectId;
+		} & (
+			| {
+					type: 1;
+					value1: ObjectId;
+			  }
+			| {
+					type: 2;
+					value2: ObjectId;
+			  }
+		),
+		"type" | "value1" | "value2"
+	>
+>().toEqualTypeOf<{
+	type: 1 | 2;
+	value1?: ObjectId;
+	value2?: ObjectId;
+}>();
