@@ -90,4 +90,4 @@ type PickDeepArray<
 				: ArrayType extends readonly unknown[]
 					? readonly [...BuildTuple<ArrayIndex>, ArrayType[ArrayIndex]]
 					: never
-		: never;
+		: Array<InternalPickDeep<NonNullable<ArrayType[number]>, P>>;
