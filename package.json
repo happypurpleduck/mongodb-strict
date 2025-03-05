@@ -12,7 +12,7 @@
 			"import": "./src/index.ts"
 		},
 		"./*": {
-			"import": "./src/types"
+			"import": "./src/types/*"
 		}
 	},
 	"files": ["./src/*.ts", "./src/types/*.ts"],
