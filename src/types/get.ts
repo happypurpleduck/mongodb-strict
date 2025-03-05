@@ -1,5 +1,5 @@
 import type { Split, StringKeyOf, UnknownArray } from "type-fest";
-import type { StringDigit } from "type-fest/source/internal";
+import type { StringDigit } from "type-fest/source/internal/characters.d.ts";
 
 interface GetOptions {
 	strict?: boolean;

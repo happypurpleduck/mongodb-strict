@@ -6,10 +6,10 @@ import type {
 } from "type-fest";
 import type {
 	BuildObject,
-	BuildTuple,
 	ObjectValue,
-} from "type-fest/source/internal";
-import type { ExtendedPrimitive } from "./primitives";
+} from "type-fest/source/internal/object.d.ts";
+import type { BuildTuple } from "type-fest/source/internal/tuple.d.ts";
+import type { ExtendedPrimitive } from "./primitives.ts";
 
 export type PickDeep<T, PathUnion extends string> = T extends ExtendedPrimitive
 	? never

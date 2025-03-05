@@ -2,26 +2,28 @@
 	"compilerOptions": {
 		"lib": ["ESNext"],
 		"target": "ESNext",
-		"module": "ESNext",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"moduleDetection": "force",
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		"allowImportingTsExtensions": true,
 
-		"types": [],
+		"noEmit": true,
 		"skipLibCheck": true,
 
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
-		"verbatimModuleSyntax": true,
-		"noEmit": true,
-
 		"strict": true,
-		"noUnusedLocals": false,
-		"noUnusedParameters": false,
 		"noImplicitReturns": true,
 		"noImplicitOverride": true,
-		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
+		"noFallthroughCasesInSwitch": true,
 		"noPropertyAccessFromIndexSignature": true,
-		"exactOptionalPropertyTypes": false,
-		"forceConsistentCasingInFileNames": true
+
+		"forceConsistentCasingInFileNames": true,
+
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"exactOptionalPropertyTypes": false
 	},
 	"include": ["src"],
 	"exclude": ["playground"]

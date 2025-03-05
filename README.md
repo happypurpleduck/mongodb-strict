@@ -1,1 +1,1 @@
-# typed-mongo
+# mongodb-strict

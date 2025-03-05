@@ -1,7 +1,7 @@
 import type { Decimal128, ObjectId } from "mongodb";
 import { expectTypeOf } from "vitest";
-import type { TItem } from "../../test/item";
-import type { OmitDeep } from "./omit-deep";
+import type { TItem } from "./item.ts";
+import type { OmitDeep } from "../types/omit-deep.ts";
 
 expectTypeOf<OmitDeep<TItem, never>>().toEqualTypeOf<TItem>();
 

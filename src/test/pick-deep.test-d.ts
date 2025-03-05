@@ -1,7 +1,7 @@
-import type { Decimal128, ObjectId } from "mongodb";
+import type { ObjectId } from "mongodb";
 import { expectTypeOf } from "vitest";
-import type { TItem } from "../../test/item";
-import type { PickDeep } from "./pick-deep";
+import type { TItem } from "./item.ts";
+import type { PickDeep } from "../types/pick-deep.ts";
 
 expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<never>();
 

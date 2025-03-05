@@ -1,6 +1,6 @@
 import type { IsLiteral } from "type-fest";
-import type { Get } from "./get";
-import type { Paths } from "./path";
+import type { Get } from "./get.ts";
+import type { Paths } from "./path.ts";
 
 export type PathsOfLiteral<T> = {
 	[K in Paths<T>]: K extends string

@@ -1,7 +1,7 @@
 import type { Decimal128 } from "mongodb";
-import { TypedCollection } from "../src/collection.ts";
+import { TypedCollection } from "../collection.ts";
 import { database } from "./client.ts";
-import type { TDocument } from "../src/document.ts";
+import type { TDocument } from "../document.ts";
 
 export interface TItem extends TDocument {
 	name: {

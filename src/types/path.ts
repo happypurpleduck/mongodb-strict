@@ -5,11 +5,11 @@ import type {
 	Subtract,
 	UnknownArray,
 } from "type-fest";
+import type { ExtendedPrimitive } from "./primitives.ts";
 import type {
 	StaticPartOfArray,
 	VariablePartOfArray,
-} from "type-fest/source/internal";
-import type { ExtendedPrimitive } from "./primitives";
+} from "type-fest/source/internal/array.d.ts";
 
 type PathsOptions = {
 	maxRecursionDepth?: number;

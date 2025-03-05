@@ -1,5 +1,5 @@
-import type { Get } from "./get";
-import type { Paths } from "./path";
+import type { Get } from "./get.ts";
+import type { Paths } from "./path.ts";
 
 export type PathsOfType<T, Type> = {
 	[K in Paths<T>]: K extends string

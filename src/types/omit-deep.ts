@@ -7,12 +7,12 @@ import type {
 	UnknownArray,
 } from "type-fest";
 import type {
-	ExactKey,
 	IsArrayReadonly,
 	SetArrayAccess,
-	ToString,
-} from "type-fest/source/internal";
-import type { ExtendedPrimitive } from "./primitives";
+} from "type-fest/source/internal/array.d.ts";
+import type { ExactKey } from "type-fest/source/internal/keys.d.ts";
+import type { ToString } from "type-fest/source/internal/string.d.ts";
+import type { ExtendedPrimitive } from "./primitives.ts";
 
 export type OmitDeep<T, PathUnion extends string> = SimplifyDeep<
 	OmitDeepHelper<T, UnionToTuple<PathUnion>>,

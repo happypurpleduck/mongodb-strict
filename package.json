@@ -1,11 +1,21 @@
 {
-	"name": "typed-mongo",
+	"name": "mongodb-strict",
+	"version": "0.0.0",
 	"module": "src/index.ts",
 	"type": "module",
 	"scripts": {
 		"type-check": "tsc",
 		"test": "vitest --typecheck"
 	},
+	"exports": {
+		".": {
+			"import": "./src/index.ts"
+		},
+		"./*": {
+			"import": "./src/types"
+		}
+	},
+	"files": ["./src/*.ts", "./src/types/*.ts"],
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@types/bun": "latest",

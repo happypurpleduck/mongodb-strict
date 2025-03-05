@@ -1,8 +1,8 @@
 import type { ConditionalKeys, Simplify } from "type-fest";
-import type { Paths } from "./path";
-import type { OmitDeep } from "./omit-deep";
-import type { PickDeep } from "./pick-deep";
-import type { Get } from "./get";
+import type { Paths } from "./path.ts";
+import type { OmitDeep } from "./omit-deep.ts";
+import type { PickDeep } from "./pick-deep.ts";
+import type { Get } from "./get.ts";
 
 // TODO: handle projection pipelines.
 export type Projection<T> =

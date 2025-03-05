@@ -2,19 +2,18 @@ import type {
 	BulkWriteOptions,
 	Collection,
 	DeleteOptions,
-	Filter,
 	FindOneAndDeleteOptions,
 	FindOneAndReplaceOptions,
 	FindOneAndUpdateOptions,
 	FindOptions,
 	InsertOneOptions,
-	OptionalUnlessRequiredId,
 	UpdateFilter,
 	UpdateOptions,
 	WithoutId,
 } from "mongodb";
-import type { TDocument } from "./document";
-import type { Projection, ProjectionType } from "./types/project";
+import type { TDocument } from "./document.ts";
+import type { Filter } from "./types/filter.ts";
+import type { Projection, ProjectionType } from "./types/project.ts";
 
 export class TypedCollection<T extends TDocument> {
 	collection: Collection<T>;
@@ -28,6 +27,7 @@ export class TypedCollection<T extends TDocument> {
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
 	) {
 		return this.collection.find<ProjectionType<T, TProjection>>(
+			// @ts-expect-error
 			filter,
 			options,
 		);
@@ -37,6 +37,7 @@ export class TypedCollection<T extends TDocument> {
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
 	) {
 		return this.collection.findOne<ProjectionType<T, TProjection>>(
+			// @ts-expect-error
 			filter,
 			options,
 		);
@@ -77,17 +78,25 @@ export class TypedCollection<T extends TDocument> {
 		return (
 			this.collection as unknown as Collection<ProjectionType<T, TProjection>>
 		).findOneAndDelete(
-			// @ts-expect-error mongodb type definition only has 'omitted' for options.
+			// @ts-expect-error
 			filter,
 			options,
 		);
 	}
 
-	insertOne(doc: OptionalUnlessRequiredId<T>, options?: InsertOneOptions) {
-		return this.collection.insertOne(doc, options);
+	insertOne(doc: T, options?: InsertOneOptions) {
+		return this.collection.insertOne(
+			// @ts-expect-error
+			doc,
+			options,
+		);
 	}
-	insertMany(docs: OptionalUnlessRequiredId<T>[], options?: BulkWriteOptions) {
-		return this.collection.insertMany(docs, options);
+	insertMany(docs: T[], options?: BulkWriteOptions) {
+		return this.collection.insertMany(
+			// @ts-expect-error
+			docs,
+			options,
+		);
 	}
 
 	updateOne(
@@ -95,20 +104,38 @@ export class TypedCollection<T extends TDocument> {
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
 	) {
-		return this.collection.updateOne(filter, update, options);
+		return this.collection.updateOne(
+			// @ts-expect-error
+			filter,
+			update,
+			options,
+		);
 	}
 	updateMany(
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
 	) {
-		return this.collection.updateMany(filter, update, options);
+		return this.collection.updateMany(
+			// @ts-expect-error
+			filter,
+			update,
+			options,
+		);
 	}
 
 	deleteOne(filter: Filter<T>, options?: DeleteOptions) {
-		return this.collection.deleteOne(filter, options);
+		return this.collection.deleteOne(
+			// @ts-expect-error
+			filter,
+			options,
+		);
 	}
 	deleteMany(filter: Filter<T>, options?: DeleteOptions) {
-		return this.collection.deleteMany(filter, options);
+		return this.collection.deleteMany(
+			// @ts-expect-error
+			filter,
+			options,
+		);
 	}
 }

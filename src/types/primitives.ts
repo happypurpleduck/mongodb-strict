@@ -1,5 +1,8 @@
 import type { Binary, Code, Decimal128, ObjectId, Timestamp, UUID } from "bson";
-import type { BuiltIns, NonRecursiveType } from "type-fest/source/internal";
+import type {
+	BuiltIns,
+	NonRecursiveType,
+} from "type-fest/source/internal/type.d.ts";
 
 export type BSONPrimitives =
 	| ObjectId

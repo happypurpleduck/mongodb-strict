@@ -1,9 +1,9 @@
 import type { Decimal128 } from "mongodb";
 import type { Simplify } from "type-fest";
 import { expectTypeOf } from "vitest";
-import type { TItem } from "../../test/item";
-import type { TDocument } from "../document";
-import type { Projection, ProjectionType } from "./project";
+import type { TItem } from "./item.ts";
+import type { TDocument } from "../document.ts";
+import type { Projection, ProjectionType } from "../types/project.ts";
 
 expectTypeOf<Projection<TItem>>().toEqualTypeOf<
 	| Partial<

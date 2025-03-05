@@ -1,8 +1,8 @@
 import type { Condition } from "mongodb";
-import type { Paths } from "./path";
-import type { Get } from "./get";
-import type { PathsOfLiteral } from "./path-of-literal";
-import type { PathsOfNonExclusiveType } from "./path-of-type";
+import type { Paths } from "./path.ts";
+import type { Get } from "./get.ts";
+import type { PathsOfLiteral } from "./path-of-literal.ts";
+import type { PathsOfNonExclusiveType } from "./path-of-type.ts";
 
 export type Filter<T> = {
 	[K in Paths<T>]?: K extends string ? Condition<Get<T, K>> : never;
