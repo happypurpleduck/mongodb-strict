@@ -11,6 +11,7 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 		ar: string;
 	};
 	price: Decimal128;
+	tag: [string, number];
 	options: Array<{
 		name: {
 			en: string;
@@ -25,6 +26,7 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 		ar: string;
 	};
 	price: Decimal128;
+	tag: [string, number];
 	options: Array<{
 		name: {
 			en: string;
@@ -41,6 +43,7 @@ expectTypeOf<
 		ar: string;
 	};
 	price: Decimal128;
+	tag: [string, number];
 	options: Array<{
 		name: {
 			ar: string;
@@ -51,16 +54,18 @@ expectTypeOf<
 
 expectTypeOf<
 	OmitDeep<
-		| {
-				_id: ObjectId;
-		  }
-		| ({
-				type: 1;
-				value1: ObjectId;
-		  } & {
-				type: 2;
-				value2: ObjectId;
-		  }),
+		{
+			_id: ObjectId;
+		} & (
+			| {
+					type: 1;
+					value1: ObjectId;
+			  }
+			| {
+					type: 2;
+					value2: ObjectId;
+			  }
+		),
 		"_id"
 	>
 >().toEqualTypeOf<

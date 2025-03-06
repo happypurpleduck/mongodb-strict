@@ -13,6 +13,9 @@ expectTypeOf<Projection<TItem>>().toEqualTypeOf<
 				| "name.en"
 				| "name.ar"
 				| "price"
+				| "tag"
+				| "tag.0"
+				| "tag.1"
 				| "options"
 				| `options.${number}`
 				| "options.name"
@@ -53,6 +56,7 @@ expectTypeOf<ProjectionType<TItem, { _id: 0; "name.en": 0 }>>().toEqualTypeOf<{
 		ar: string;
 	};
 	price: Decimal128;
+	tag: [string, number];
 	options: Array<{
 		name: {
 			en: string;

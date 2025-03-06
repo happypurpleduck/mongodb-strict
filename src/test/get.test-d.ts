@@ -7,6 +7,7 @@ expectTypeOf<Get<TItem, "name">>().toMatchTypeOf<TItem["name"]>();
 expectTypeOf<Get<TItem, "name.en">>().toMatchTypeOf<TItem["name"]["en"]>();
 expectTypeOf<Get<TItem, "name.ar">>().toMatchTypeOf<TItem["name"]["ar"]>();
 expectTypeOf<Get<TItem, "price">>().toMatchTypeOf<TItem["price"]>();
+expectTypeOf<Get<TItem, "tag">>().toMatchTypeOf<TItem["tag"]>();
 expectTypeOf<Get<TItem, "options">>().toMatchTypeOf<TItem["options"]>();
 expectTypeOf<Get<TItem, "options.0">>().toMatchTypeOf<
 	TItem["options"][0] | undefined

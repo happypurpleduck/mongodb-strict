@@ -8,6 +8,9 @@ expectTypeOf<Paths<TItem>>().toEqualTypeOf<
 	| "name.en"
 	| "name.ar"
 	| "price"
+	| "tag"
+	| "tag.0"
+	| "tag.1"
 	| "options"
 	| `options.${number}`
 	| "options.name"

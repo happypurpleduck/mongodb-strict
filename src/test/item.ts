@@ -9,6 +9,7 @@ export interface TItem extends TDocument {
 		ar: string;
 	};
 	price: Decimal128;
+	tag: [string, number];
 	options: Array<{
 		name: {
 			en: string;
