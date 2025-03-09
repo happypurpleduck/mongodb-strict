@@ -3,6 +3,7 @@ import type { Paths } from "./path.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfLiteral } from "./path-of-literal.ts";
 import type { PathsOfNonExclusiveType } from "./path-of-type.ts";
+import type { SimplifyDeep } from "./simplify-deep.ts";
 
 export type Filter<T> = {
 	[K in Paths<T>]?: K extends string ? Condition<Get<T, K>> : never;
