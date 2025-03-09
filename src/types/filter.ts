@@ -29,6 +29,17 @@ export type TLiteralFilter<T> =
 	| { $nin?: ReadonlyArray<T> }
 	| { $not?: Exclude<TLiteralFilter<T>, T> };
 
+// TODO:
+export type TLiteralsFilterType<
+  T,
+  Filter extends TLiteralFilter<T>,
+> = SimplifyDeep<{
+  -readonly [K in keyof Filter]: TLiteralFilterType<
+    Get<T, K>,
+    Filter[K]
+  >;
+}>;
+
 export type TLiteralFilterType<
 	T,
 	Filter extends TLiteralFilter<T>,
