@@ -48,10 +48,10 @@ type InternalPaths<
 	Options extends Required<PathsOptions>,
 > = Options["maxRecursionDepth"] extends infer MaxDepth extends number
 	? Required<T> extends infer T
-		? T extends EmptyObject | readonly []
-			? never
+		? T extends readonly []
+			? never // TODO: <-- check
 			: {
-					[Key in keyof T]: Key extends string | number // Limit `Key` to string or number.
+					[Key in keyof T]: Key extends string | number
 						?
 								| Key
 								| (GreaterThan<MaxDepth, 0> extends true
