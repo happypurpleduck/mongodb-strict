@@ -1,23 +1,33 @@
 /* eslint-disable @typescript-eslint/prefer-return-this-type */
 
-import type { Collection, Filter, NumericType } from "mongodb";
-import type { ConditionalKeys, Except } from "type-fest";
-import type { TLiteralFilterType, TLiteralsFilter } from "./types/filter.ts";
+import type {
+	AggregateOptions,
+	Collection,
+	Filter,
+	NumericType,
+} from "mongodb";
+import type { Except } from "type-fest";
+import type { TLiteralsFilter, TLiteralsFilterType } from "./types/filter.ts";
 import type { Get } from "./types/get.ts";
 import type { Paths } from "./types/path.ts";
-import type { PathsOfType } from "./types/path-of-type.ts";
+import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
 import type { Projection, ProjectionType } from "./types/project.ts";
+import type { Singular } from "./types/singular.ts";
 
 export class Aggregate<T> {
 	// @ts-expect-error
 	collection: Collection<T>;
+	options?: AggregateOptions;
+
 	pipeline: {}[] = [];
 
 	constructor(
 		// @ts-expect-error
 		collection: Collection<T>,
+		options?: AggregateOptions,
 	) {
 		this.collection = collection;
+		this.options = options;
 	}
 
 	match(match: Filter<T>) {
@@ -33,7 +43,7 @@ export class Aggregate<T> {
 			$match: match,
 		});
 
-		return this as unknown as Aggregate<T & TLiteralFilterType<T, TFilter>>;
+		return this as unknown as Aggregate<T & TLiteralsFilterType<T, TFilter>>;
 	}
 
 	// TODO:
@@ -50,7 +60,7 @@ export class Aggregate<T> {
 	lookup<
 		TC,
 		const TLocalField extends Paths<T>,
-		const TLocalPropType extends Get<T, TLocalField & string>,
+		const TLocalPropType extends Singular<Get<T, TLocalField & string>>,
 		const TField extends string,
 		const TResult = TC,
 	>(lookup: {
@@ -60,7 +70,7 @@ export class Aggregate<T> {
 		foreignField: PathsOfType<NoInfer<TC>, TLocalPropType>;
 		/** this currently only support top level */
 		as: TField;
-		// TODO: let
+		// TODO: lookup: let
 		let?: never;
 		pipeline?: (aggregation: Aggregate<TC>) => Aggregate<TResult>;
 	}): Aggregate<
@@ -82,11 +92,15 @@ export class Aggregate<T> {
 		return this;
 	}
 
-	// TODO: deep
-	unwind<TUnwrap extends string & ConditionalKeys<T, any[]>>(
+	unwind<TUnwrap extends PathOfType<T, unknown[]>, TArrayIndex extends string>(
 		unwind:
 			| `$${TUnwrap}`
-			| { path: `$${TUnwrap}`; preserveNullAndEmptyArrays: boolean },
+			| {
+					path: `$${TUnwrap}`;
+					preserveNullAndEmptyArrays?: boolean;
+					// TODO: unwind: array index
+					includeArrayIndex?: TArrayIndex;
+			  },
 	) {
 		this.pipeline.push({ $unwind: unwind });
 
@@ -221,10 +235,10 @@ export class Aggregate<T> {
 	}
 
 	next() {
-		return this.collection.aggregate(this.pipeline).next();
+		return this.collection.aggregate(this.pipeline, this.options).next();
 	}
 
 	toArray() {
-		return this.collection.aggregate(this.pipeline).toArray();
+		return this.collection.aggregate(this.pipeline, this.options).toArray();
 	}
 }
