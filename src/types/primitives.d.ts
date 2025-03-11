@@ -12,9 +12,12 @@ export type BSONPrimitives =
 	| Timestamp
 	| UUID;
 
-export type ExtendedPrimitive =
-	| BuiltIns
-	| NonRecursiveType
-	| BSONPrimitives
-	| ReadonlyMap<unknown, unknown>
-	| ReadonlySet<unknown>;
+export interface Primitives {
+	BuiltIns: BuiltIns;
+	NonRecursiveType: NonRecursiveType;
+	BSONPrimitives: BSONPrimitives;
+	ReadonlyMap: ReadonlyMap<unknown, unknown>;
+	ReadonlySet: ReadonlySet<unknown>;
+}
+
+export type ExtendedPrimitive = Primitives[keyof Primitives];
