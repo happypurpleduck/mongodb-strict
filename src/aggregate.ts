@@ -1,11 +1,10 @@
-import type {
-	AggregateOptions,
-	Collection,
-	Filter,
-	NumericType,
-} from "mongodb";
+import type { AggregateOptions, Collection, NumericType } from "mongodb";
 import type { Except } from "type-fest";
-import type { TLiteralsFilter, TLiteralsFilterType } from "./types/filter.ts";
+import type {
+	Filter,
+	TLiteralsFilter,
+	TLiteralsFilterType,
+} from "./types/filter.ts";
 import type { Get } from "./types/get.ts";
 import type { Paths } from "./types/path.ts";
 import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
