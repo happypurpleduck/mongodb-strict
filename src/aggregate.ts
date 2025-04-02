@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/prefer-return-this-type */
-
 import type {
 	AggregateOptions,
 	Collection,
@@ -14,10 +12,15 @@ import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
 import type { Projection, ProjectionType } from "./types/project.ts";
 import type { Singular } from "./types/singular.ts";
 
+export type InferAggregateType<T extends Aggregate<any>> = T["~type"];
+
 export class Aggregate<T> {
 	// @ts-expect-error
 	collection: Collection<T>;
 	options?: AggregateOptions;
+
+	/** type only */
+	"~type": T;
 
 	pipeline: {}[] = [];
 
@@ -124,9 +127,9 @@ export class Aggregate<T> {
 			// | { $bottom: never }
 			// | { $bottomN: never }
 			| { $count: Record<never, never> }
-			| { $first: `$${Paths<T>}` }
+			| { $first: `$${Paths<T>}` | "$$ROOT" }
 			// | { $firstN: never }
-			| { $last: `$${Paths<T>}` }
+			| { $last: `$${Paths<T>}` | "$$ROOT" }
 			// | { $lastN: never }
 			| { $max: `$${Paths<T>}` }
 			// | { $maxN: never }
@@ -179,13 +182,17 @@ export class Aggregate<T> {
 										? number
 										: /* first */
 											TFields[K] extends { $first: `$${infer K2}` }
-											? Get<T, K2>
+											? K2 extends "$ROOT"
+												? T
+												: Get<T, K2>
 											: /* firstN */
 												TFields[K] extends { $first: any }
 												? unknown
 												: /* last */
 													TFields[K] extends { $last: `$${infer K2}` }
-													? Get<T, K2>
+													? K2 extends "$ROOT"
+														? T
+														: Get<T, K2>
 													: /* lastN */
 														TFields[K] extends { $lastN: any }
 														? unknown
