@@ -3,12 +3,17 @@ import type { Paths } from "./path.ts";
 import type { OmitDeep } from "./omit-deep.ts";
 import type { PickDeep } from "./pick-deep.ts";
 import type { Get } from "./get.ts";
+import type { PathsOfType } from "./path-of-type.ts";
 
 // TODO: handle projection pipelines.
 export type Projection<T> =
-	| {
+	| ({
 			[K in Paths<T>]?: 0 | 1;
-	  }
+	  } & {
+			[K in string]?:
+				| `$${Paths<T>}`
+				| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] };
+	  })
 	| undefined;
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
@@ -28,6 +33,14 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 						> & {
 							[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
 								? Get<T, KK>
+								: never;
+						} & {
+							[K in ConditionalKeys<TP, Record<string, any>>]: TP[K] extends {
+								$arrayElemAt: [`$${infer KK}`, infer Index];
+							}
+								? // @ts-expect-error
+									// TODO: support tuple and tuple with negative index
+									Get<T, KK>[Index] | undefined
 								: never;
 						}
 					: never
