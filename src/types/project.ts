@@ -5,11 +5,15 @@ import type { PickDeep } from "./pick-deep.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfType } from "./path-of-type.ts";
 
+type ProjectionBoolean = 0 | 1 | boolean;
+
 // TODO: handle projection pipelines.
 export type Projection<T> =
-	| ({
-			[K in Paths<T>]?: 0 | 1 | boolean | ProjectionPipeline<T>;
-	  } & Partial<Record<string, ProjectionPipeline<T>>>)
+	| {
+			[K in Paths<T> | (string & {})]?: K extends Paths<T>
+				? ProjectionBoolean | ProjectionPipeline<T>
+				: ProjectionPipeline<T>;
+	  }
 	| undefined;
 
 export type ProjectionPipeline<T> =
