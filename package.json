@@ -9,19 +9,19 @@
 	},
 	"exports": {
 		".": {
-			"import": "./src/index.ts"
+			"default": "./src/index.ts"
 		},
 		"./aggregate": {
-			"import": "./src/aggregate.ts"
+			"default": "./src/aggregate.ts"
 		},
 		"./collection": {
-			"import": "./src/collection.ts"
+			"default": "./src/collection.ts"
 		},
 		"./document": {
-			"import": "./src/document.ts"
+			"default": "./src/document.ts"
 		},
 		"./*": {
-			"import": "./src/types/*"
+			"default": "./src/types/*"
 		}
 	},
 	"files": ["./src/*.ts", "./src/types/*.ts"],
