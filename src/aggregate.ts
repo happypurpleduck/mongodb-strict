@@ -241,6 +241,18 @@ export class Aggregate<T> {
 		return this as unknown as Aggregate<ProjectionType<T, TProjection>>;
 	}
 
+	replaceRoot<const TField extends PathsOfType<T, Record<string, any>>>(
+		path: `$${TField}`,
+	) {
+		this.pipeline.push({
+			$replaceRoot: {
+				newRoot: path,
+			},
+		});
+
+		return this as unknown as Aggregate<Get<T, TField>>;
+	}
+
 	next() {
 		return this.collection.aggregate(this.pipeline, this.options).next();
 	}
