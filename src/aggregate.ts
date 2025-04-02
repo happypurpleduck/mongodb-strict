@@ -62,7 +62,8 @@ export class Aggregate<T> {
 	lookup<
 		TC,
 		const TLocalField extends Paths<T>,
-		const TLocalPropType extends Singular<Get<T, TLocalField & string>>,
+		/** @ts-expect-error */
+		const TLocalPropType extends Singular<Get<T, TLocalField>>,
 		const TField extends string,
 		const TResult = TC,
 	>(lookup: {
