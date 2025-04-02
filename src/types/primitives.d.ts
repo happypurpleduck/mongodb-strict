@@ -20,4 +20,6 @@ export interface Primitives {
 	ReadonlySet: ReadonlySet<unknown>;
 }
 
-export type ExtendedPrimitive = Primitives[keyof Primitives];
+export type ExtendedPrimitive =
+	| Primitives[keyof Primitives]
+	| Primitives[keyof Primitives][];
