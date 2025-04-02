@@ -8,8 +8,14 @@ import type {
 import type { Get } from "./types/get.ts";
 import type { Paths } from "./types/path.ts";
 import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
-import type { Projection, ProjectionType } from "./types/project.ts";
+import type {
+	Projection,
+	ProjectionPipeline,
+	ProjectionPipelineType,
+	ProjectionType,
+} from "./types/project.ts";
 import type { Singular } from "./types/singular.ts";
+import type { OmitDeep } from "./types/omit-deep.ts";
 
 export type InferAggregateType<T extends Aggregate<any>> = T["~type"];
 
@@ -47,7 +53,6 @@ export class Aggregate<T> {
 
 		return this as unknown as Aggregate<T & TLiteralsFilterType<T, TFilter>>;
 	}
-
 	// TODO:
 	sort(
 		sort: {
@@ -239,6 +244,22 @@ export class Aggregate<T> {
 		this.pipeline.push({ $project: projection });
 
 		return this as unknown as Aggregate<ProjectionType<T, TProjection>>;
+	}
+
+	addFields<const TFields extends Record<string, ProjectionPipeline<T>>>(
+		fields: TFields,
+	) {
+		this.pipeline.push({ $addFields: fields });
+
+		return this as unknown as Aggregate<
+			// TODO: this probably does not need OmitDeep
+			OmitDeep<
+				T,
+				// @ts-expect-error
+				keyof TFields
+			> &
+				ProjectionPipelineType<T, TFields>
+		>;
 	}
 
 	replaceRoot<const TField extends PathsOfType<T, Record<string, any>>>(
