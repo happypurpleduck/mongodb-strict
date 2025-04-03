@@ -34,7 +34,7 @@ type InternalPickDeep<
 		? PickDeepArray<T, Path>
 		: T extends object
 			? PickDeepObject<T, Path>
-			: never;
+			: unknown;
 
 type PickDeepObject<
 	RecordType extends object,

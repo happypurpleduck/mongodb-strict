@@ -25,20 +25,24 @@ export type ProjectionPipeline<T> =
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 	? Simplify<T>
 	: Simplify<
-			keyof TP extends ConditionalKeys<TP, 0 | false>
-				? OmitDeep<T, ConditionalKeys<TP, 0 | false> & string>
+			(keyof TP extends ConditionalKeys<TP, 0 | false>
+				? OmitDeep<
+						T,
+						// @ts-expect-error
+						ConditionalKeys<TP, 0 | false>
+					>
 				: ConditionalKeys<TP, 0 | false> extends "_id"
 					? PickDeep<
-							T,
-							| (ConditionalKeys<TP, 1 | true> & string)
+							T, //@ts-expect-error
+							| ConditionalKeys<TP, 1 | true>
 							| ("_id" extends keyof TP
 									? TP["_id"] extends 0 | string
-										? never
+										? unknown
 										: "_id"
 									: "_id")
-						> &
-							(TP extends {} ? ProjectionPipelinePath<T, TP> : never)
-					: never
+						>
+					: unknown) &
+				(TP extends {} ? ProjectionPipelineType<T, TP> : never)
 		>;
 
 export type ProjectionPipelineType<
@@ -72,3 +76,24 @@ export type ProjectionPipelineTypePipesInternal<T, TT> = //
 		: TT extends { $literal: infer V }
 			? V
 			: never;
+
+// TODO: convert to tests
+
+type A = ProjectionType<{ x: 5; y: 1 }, { x: 1 }>;
+//   ^?
+type B = ProjectionType<{ x: 5; y: 1 }, { z: "$x" }>;
+//   ^?
+type C = ProjectionType<{ x: 5; y: 1 }, { x: 1; z: "$x" }>;
+//   ^?
+type D = ProjectionType<{ x: 5; y: 1 }, {}>;
+//   ^?
+type E = ProjectionType<{ x: 5; y: 1 }, { x: 0 }>;
+//   ^?
+type F = ProjectionType<{ x: 5; y: 1 }, { a: { $literal: "a" } }>;
+//   ^?
+type G = ProjectionType<{ x: 5; y: 1 }, { x: { $literal: "a" } }>;
+//   ^?
+type H = ProjectionType<{ x: 5; y: 1 }, { x: 1; a: { $literal: "a" } }>;
+//   ^?
+type I = ProjectionType<{ x: 5; y: 1 }, { y: 1; x: { $literal: "a" } }>;
+//   ^?
