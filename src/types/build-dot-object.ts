@@ -1,9 +1,9 @@
-export type BuildDotObject<T extends Record<PropertyKey, any>> = {
-	[K in keyof T]: BuildDotObjectHelper<K, T[K]>;
-}[keyof T];
-
-type T = BuildDotObject<{ "x.z": 1 }>;
-//   ^?
+export type BuildDotObject<T extends Record<PropertyKey, any>> =
+	keyof T extends never
+		? unknown
+		: {
+				[K in keyof T]: BuildDotObjectHelper<K, T[K]>;
+			}[keyof T];
 
 export type BuildDotObjectHelper<
 	Key extends PropertyKey,
