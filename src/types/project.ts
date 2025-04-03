@@ -1,4 +1,4 @@
-import type { ConditionalKeys, Simplify } from "type-fest";
+import type { ConditionalKeys, IsTuple, Simplify } from "type-fest";
 import type { Paths } from "./path.ts";
 import type { OmitDeep } from "./omit-deep.ts";
 import type { PickDeep } from "./pick-deep.ts";
@@ -18,6 +18,7 @@ export type Projection<T> =
 
 export type ProjectionPipeline<T> =
 	| `$${Paths<T>}`
+	| { $literal: any }
 	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] };
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
@@ -34,35 +35,39 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 										? never
 										: "_id"
 									: "_id")
-						> & {
-							[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
-								? Get<T, KK>
-								: never;
-						} & {
-							[K in ConditionalKeys<TP, Record<string, any>>]: TP[K] extends {
-								$arrayElemAt: [`$${infer KK}`, infer Index];
-							}
-								? // @ts-expect-error
-									// TODO: support tuple and tuple with negative index
-									Get<T, KK>[Index] | undefined
-								: never;
-						}
+						> &
+							(TP extends {} ? ProjectionPipelinePath<T, TP> : never)
 					: never
 		>;
 
 export type ProjectionPipelineType<
 	T,
 	TP extends Record<string, ProjectionPipeline<T>>,
-> = {
+> = ProjectionPipelinePath<T, TP> & ProjectionPipelinePipes<T, TP>;
+
+export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
 	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
 		? Get<T, KK>
 		: never;
-} & {
-	[K in ConditionalKeys<TP, Record<string, any>>]: TP[K] extends {
-		$arrayElemAt: [`$${infer KK}`, infer Index];
-	}
-		? // @ts-expect-error
-			// TODO: support tuple and tuple with negative index
-			Get<T, KK>[Index] | undefined
-		: never;
 };
+
+export type ProjectionPipelinePipes<T, TP> = {
+	[K in ConditionalKeys<
+		TP,
+		Record<string, any>
+	>]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
+};
+
+export type ProjectionPipelineTypePipesInternal<T, TT> = //
+	TT extends {
+		$arrayElemAt: [`$${infer KK}`, infer Index extends number];
+	}
+		? // TODO: support tuple and tuple with negative index
+			Get<T, KK> extends any[]
+			?
+					| Get<T, KK>[Index]
+					| (IsTuple<Get<T, KK>> extends true ? never : undefined)
+			: never
+		: TT extends { $literal: infer V }
+			? V
+			: never;
