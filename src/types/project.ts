@@ -9,10 +9,11 @@ type ProjectionBoolean = 0 | 1 | boolean;
 
 // TODO: handle projection pipelines.
 export type Projection<T> =
+	// TODO: prevent ProjectionBoolean from non Paths<T>
 	| {
-			[K in Paths<T> | (string & {})]?: K extends Paths<T>
-				? ProjectionBoolean | ProjectionPipeline<T>
-				: ProjectionPipeline<T>;
+			[K in Paths<T> | (string & {})]?:
+				| ProjectionBoolean
+				| ProjectionPipeline<T>;
 	  }
 	| undefined;
 
