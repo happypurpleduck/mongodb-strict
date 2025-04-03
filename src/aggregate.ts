@@ -16,6 +16,7 @@ import type {
 } from "./types/project.ts";
 import type { Singular } from "./types/singular.ts";
 import type { OmitDeep } from "./types/omit-deep.ts";
+import type { BuildDotObject } from "./types/build-dot-object.ts";
 
 export type InferAggregateType<T extends Aggregate<any>> = T["~type"];
 
@@ -258,7 +259,7 @@ export class Aggregate<T> {
 				// @ts-expect-error
 				keyof TFields
 			> &
-				ProjectionPipelineType<T, TFields>
+				BuildDotObject<ProjectionPipelineType<T, TFields>>
 		>;
 	}
 
@@ -275,10 +276,12 @@ export class Aggregate<T> {
 	}
 
 	next() {
-		return this.collection.aggregate(this.pipeline, this.options).next();
+		// @ts-expect-error
+		return this.collection.aggregate<T>(this.pipeline, this.options).next();
 	}
 
 	toArray() {
-		return this.collection.aggregate(this.pipeline, this.options).toArray();
+		// @ts-expect-error
+		return this.collection.aggregate<T>(this.pipeline, this.options).toArray();
 	}
 }
