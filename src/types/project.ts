@@ -1,9 +1,15 @@
-import type { ConditionalKeys, IsTuple, Simplify } from "type-fest";
+import type {
+	ConditionalKeys,
+	IsTuple,
+	Simplify,
+	UnionToIntersection,
+} from "type-fest";
 import type { Paths } from "./path.ts";
 import type { OmitDeep } from "./omit-deep.ts";
 import type { PickDeep } from "./pick-deep.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfType } from "./path-of-type.ts";
+import type { BuildDotObject } from "./build-dot-object.ts";
 
 type ProjectionBoolean = 0 | 1 | boolean;
 
@@ -42,13 +48,14 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 									: "_id")
 						>
 					: unknown) &
-				(TP extends {} ? ProjectionPipelineType<T, TP> : never)
+				(TP extends {} ? BuildDotObject<ProjectionPipelineType<T, TP>> : never)
 		>;
 
-export type ProjectionPipelineType<
+export type ProjectionPipelineType<T, TP extends {}> = ProjectionPipelinePath<
 	T,
-	TP extends Record<string, ProjectionPipeline<T>>,
-> = ProjectionPipelinePath<T, TP> & ProjectionPipelinePipes<T, TP>;
+	TP
+> &
+	ProjectionPipelinePipes<T, TP>;
 
 export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
 	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
@@ -81,7 +88,7 @@ export type ProjectionPipelineTypePipesInternal<T, TT> = //
 
 type A = ProjectionType<{ x: 5; y: 1 }, { x: 1 }>;
 //   ^?
-type B = ProjectionType<{ x: 5; y: 1 }, { z: "$x" }>;
+type B = ProjectionType<{ x: 5; y: 1 }, { "z.a": "$x" }>;
 //   ^?
 type C = ProjectionType<{ x: 5; y: 1 }, { x: 1; z: "$x" }>;
 //   ^?
@@ -97,3 +104,5 @@ type H = ProjectionType<{ x: 5; y: 1 }, { x: 1; a: { $literal: "a" } }>;
 //   ^?
 type I = ProjectionType<{ x: 5; y: 1 }, { y: 1; x: { $literal: "a" } }>;
 //   ^?
+
+//
