@@ -1,15 +1,11 @@
-import type {
-	ConditionalKeys,
-	IsTuple,
-	Simplify,
-	UnionToIntersection,
-} from "type-fest";
+import type { ConditionalKeys, IsTuple } from "type-fest";
 import type { Paths } from "./path.ts";
 import type { OmitDeep } from "./omit-deep.ts";
 import type { PickDeep } from "./pick-deep.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfType } from "./path-of-type.ts";
 import type { BuildDotObject } from "./build-dot-object.ts";
+import type { SimplifyDeep } from "./simplify-deep.ts";
 
 type ProjectionBoolean = 0 | 1 | boolean;
 
@@ -29,8 +25,8 @@ export type ProjectionPipeline<T> =
 	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] };
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
-	? Simplify<T>
-	: Simplify<
+	? SimplifyDeep<T>
+	: SimplifyDeep<
 			(keyof TP extends ConditionalKeys<TP, 0 | false>
 				? OmitDeep<
 						T,
