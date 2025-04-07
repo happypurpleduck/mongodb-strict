@@ -22,7 +22,8 @@ export type Projection<T> =
 export type ProjectionPipeline<T> =
 	| `$${Paths<T>}`
 	| { $literal: any }
-	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] };
+	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] }
+	| { [K in string]: ProjectionPipeline<T> };
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 	? SimplifyDeep<T>
@@ -39,7 +40,7 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 							| ConditionalKeys<TP, 1 | true>
 							| ("_id" extends keyof TP
 									? TP["_id"] extends 0 | string
-										? unknown
+										? never
 										: "_id"
 									: "_id")
 						>
@@ -57,13 +58,16 @@ export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
 	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
 		? Get<T, KK>
 		: never;
+} & {
+	[K in ConditionalKeys<TP, Record<string, any>>]: ProjectionPipelineType<
+		T,
+		TP[K]
+	>;
 };
 
 export type ProjectionPipelinePipes<T, TP> = {
-	[K in ConditionalKeys<
-		TP,
-		Record<string, any>
-	>]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
+	[K in ConditionalKeys<TP, Record<string, any>> &
+		(keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
 };
 
 export type ProjectionPipelineTypePipesInternal<T, TT> = //
