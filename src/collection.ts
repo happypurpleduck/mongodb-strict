@@ -32,6 +32,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	findOne<const TProjection extends Projection<T>>(
 		filter: Filter<T>,
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
@@ -57,6 +58,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	findOneAndReplace<const TProjection extends Projection<T>>(
 		filter: Filter<T>,
 		update: WithoutId<T>,
@@ -71,6 +73,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	findOneAndDelete<const TProjection extends Projection<T>>(
 		filter: Filter<T>,
 		options?: FindOneAndDeleteOptions & { projection: TProjection },
@@ -91,6 +94,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	insertMany(docs: T[], options?: BulkWriteOptions) {
 		return this.collection.insertMany(
 			// @ts-expect-error
@@ -111,6 +115,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	updateMany(
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
@@ -131,6 +136,7 @@ export class TypedCollection<T extends TDocument> {
 			options,
 		);
 	}
+
 	deleteMany(filter: Filter<T>, options?: DeleteOptions) {
 		return this.collection.deleteMany(
 			// @ts-expect-error

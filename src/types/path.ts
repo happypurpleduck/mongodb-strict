@@ -1,19 +1,18 @@
 import type {
-	EmptyObject,
 	GreaterThan,
 	IsAny,
 	Subtract,
 	UnknownArray,
 } from "type-fest";
-import type { ExtendedPrimitive } from "./primitives.ts";
 import type {
 	StaticPartOfArray,
 	VariablePartOfArray,
 } from "type-fest/source/internal/array.d.ts";
+import type { ExtendedPrimitive } from "./primitives.ts";
 
-type PathsOptions = {
+interface PathsOptions {
 	maxRecursionDepth?: number;
-};
+}
 
 export type Paths<T, Options extends PathsOptions = {}> = _Paths<
 	T,
@@ -35,9 +34,9 @@ type _Paths<T, Options extends Required<PathsOptions>> = T extends
 		: T extends UnknownArray
 			? number extends T["length"]
 				?
-						| InternalPaths<T[number], Options>
-						| InternalPaths<StaticPartOfArray<T>, Options>
-						| InternalPaths<Array<VariablePartOfArray<T>[number]>, Options>
+				| InternalPaths<T[number], Options>
+				| InternalPaths<StaticPartOfArray<T>, Options>
+				| InternalPaths<Array<VariablePartOfArray<T>[number]>, Options>
 				: InternalPaths<T, Options>
 			: T extends object
 				? InternalPaths<T, Options>
@@ -53,17 +52,17 @@ type InternalPaths<
 			: {
 					[Key in keyof T]: Key extends string | number
 						?
-								| Key
-								| (GreaterThan<MaxDepth, 0> extends true
-										? _Paths<
-												T[Key],
-												{ maxRecursionDepth: Subtract<MaxDepth, 1> }
-											> extends infer SubPath
-											? SubPath extends string | number
-												? `${Key}.${SubPath}`
-												: never
-											: never
-										: never)
+						| Key
+						| (GreaterThan<MaxDepth, 0> extends true
+							? _Paths<
+								T[Key],
+								{ maxRecursionDepth: Subtract<MaxDepth, 1> }
+							> extends infer SubPath
+								? SubPath extends string | number
+									? `${Key}.${SubPath}`
+									: never
+								: never
+							: never)
 						: never;
 				}[keyof T & (T extends UnknownArray ? number : unknown)]
 		: never

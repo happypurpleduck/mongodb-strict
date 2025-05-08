@@ -1,7 +1,8 @@
+import type { TItem } from "./item.ts";
+import { Decimal128, ObjectId } from "mongodb";
 import { client } from "./client.ts";
 import { ar, en } from "./faker.ts";
-import { Item, type TItem } from "./item.ts";
-import { Decimal128, ObjectId } from "mongodb";
+import { Item } from "./item.ts";
 
 function create_item(): TItem {
 	const options: TItem["options"] = [];
@@ -48,7 +49,7 @@ await Item.deleteMany({});
 console.timeEnd("reset");
 
 console.time("fake");
-const items = new Array(100_000).fill(0).map(() => create_item());
+const items = Array.from({ length: 100_000 }).fill(0).map(() => create_item());
 console.timeEnd("fake");
 
 console.time("insert");

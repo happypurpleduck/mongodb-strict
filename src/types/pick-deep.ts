@@ -11,18 +11,18 @@ export type PickDeep<T, PathUnion extends string> = T extends ExtendedPrimitive
 	? never
 	: T extends UnknownArray
 		? UnionToIntersection<
-				{
-					[P in PathUnion]: InternalPickDeep<T, P>;
-				}[PathUnion]
-			>
+			{
+				[P in PathUnion]: InternalPickDeep<T, P>;
+			}[PathUnion]
+		>
 		: T extends object
 			? SimplifyDeep<
-					UnionToIntersection<
-						{
-							[P in PathUnion]: InternalPickDeep<T, P>;
-						}[PathUnion]
-					>
+				UnionToIntersection<
+					{
+						[P in PathUnion]: InternalPickDeep<T, P>;
+					}[PathUnion]
 				>
+			>
 			: never;
 
 type InternalPickDeep<
@@ -43,10 +43,10 @@ type PickDeepObject<
 	? ObjectValue<RecordType, RecordKeyInPath> extends infer ObjectV
 		? IsNever<ObjectV> extends false
 			? BuildObject<
-					RecordKeyInPath,
-					InternalPickDeep<NonNullable<ObjectV>, SubPath>,
-					RecordType
-				>
+				RecordKeyInPath,
+				InternalPickDeep<NonNullable<ObjectV>, SubPath>,
+				RecordType
+			>
 			: never
 		: never
 	: ObjectValue<RecordType, P> extends infer ObjectV
@@ -64,8 +64,8 @@ type PickDeepArray<
 			? Array<InternalPickDeep<NonNullable<ArrayType[number]>, SubPath>>
 			: ArrayType extends readonly unknown[]
 				? ReadonlyArray<
-						InternalPickDeep<NonNullable<ArrayType[number]>, SubPath>
-					>
+					InternalPickDeep<NonNullable<ArrayType[number]>, SubPath>
+				>
 				: never
 		: ArrayType extends unknown[]
 			? [
@@ -74,9 +74,9 @@ type PickDeepArray<
 				]
 			: ArrayType extends readonly unknown[]
 				? readonly [
-						...BuildTuple<ArrayIndex>,
-						InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
-					]
+					...BuildTuple<ArrayIndex>,
+					InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
+				]
 				: never
 	: P extends `${infer ArrayIndex extends number}`
 		? number extends ArrayIndex

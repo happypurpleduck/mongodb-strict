@@ -1,7 +1,7 @@
-import { expectTypeOf } from "vitest";
 import type { Filter } from "../types/filter.ts";
 import type { TItem } from "./item.ts";
 import { Decimal128 } from "mongodb";
+import { expectTypeOf } from "vitest";
 
 type ItemFilter = Filter<TItem>;
 

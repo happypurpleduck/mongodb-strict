@@ -1,8 +1,8 @@
 import type { Condition } from "mongodb";
-import type { Paths } from "./path.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfLiteral } from "./path-of-literal.ts";
 import type { PathsOfNonExclusiveType } from "./path-of-type.ts";
+import type { Paths } from "./path.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
 export type Filter<T> = {
@@ -11,6 +11,16 @@ export type Filter<T> = {
 	$or?: Array<Filter<T>>;
 	$and?: Array<Filter<T>>;
 	$nor?: Array<Filter<T>>;
+};
+
+export type GenericsFilter<T> = {
+	[K in Exclude<Paths<T>, PathsOfLiteral<T>>]?: K extends string
+		? Condition<Get<T, K>>
+		: never;
+} & {
+	$or?: Array<GenericsFilter<T>>;
+	$and?: Array<GenericsFilter<T>>;
+	$nor?: Array<GenericsFilter<T>>;
 };
 
 export type TLiteralsFilter<T> = {
@@ -32,13 +42,10 @@ export type TLiteralFilter<T> =
 
 // TODO:
 export type TLiteralsFilterType<
-  T,
-  Filter extends TLiteralFilter<T>,
+	T,
+	Filter extends TLiteralFilter<T>,
 > = SimplifyDeep<{
-  -readonly [K in keyof Filter]: TLiteralFilterType<
-    Get<T, K>,
-    Filter[K]
-  >;
+	-readonly [K in keyof Filter]: TLiteralFilterType<Get<T, K>, Filter[K]>;
 }>;
 
 export type TLiteralFilterType<

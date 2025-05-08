@@ -44,11 +44,11 @@ type OmitDeepArrayWithOnePath<
 	? number extends ArrayIndex
 		? Array<OmitDeepWithOnePath<NonNullable<ArrayType[number]>, SubPath>>
 		: ArraySplice<
-				ArrayType,
-				ArrayIndex,
-				1,
-				[OmitDeepWithOnePath<NonNullable<ArrayType[ArrayIndex]>, SubPath>]
-			>
+			ArrayType,
+			ArrayIndex,
+			1,
+			[OmitDeepWithOnePath<NonNullable<ArrayType[ArrayIndex]>, SubPath>]
+		>
 	: P extends `${infer ArrayIndex extends number}`
 		? number extends ArrayIndex
 			? []

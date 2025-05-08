@@ -1,6 +1,6 @@
-import { expectTypeOf } from "vitest";
-import type { TItem } from "./item.ts";
 import type { Get } from "../types/get.ts";
+import type { TItem } from "./item.ts";
+import { expectTypeOf } from "vitest";
 
 expectTypeOf<Get<TItem, "_id">>().toMatchTypeOf<TItem["_id"]>();
 expectTypeOf<Get<TItem, "name">>().toMatchTypeOf<TItem["name"]>();

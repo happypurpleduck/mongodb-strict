@@ -1,4 +1,4 @@
-import { Faker, ar as ar_locale, en as en_locale, base } from "@faker-js/faker";
+import { ar as ar_locale, base, en as en_locale, Faker } from "@faker-js/faker";
 
 const seed = Math.random();
 

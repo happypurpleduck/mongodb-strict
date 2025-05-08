@@ -14,23 +14,23 @@ type GetWithPath<
 	: Keys extends readonly [infer Head, ...infer Tail]
 		? Head extends `${number}`
 			? GetWithPath<
-					PropertyOf<BaseType, Extract<Head, string>, Options>,
-					Extract<Tail, string[]>,
-					Options
-				>
+				PropertyOf<BaseType, Extract<Head, string>, Options>,
+				Extract<Tail, string[]>,
+				Options
+			>
 			: BaseType extends UnknownArray
 				? Array<
-						GetWithPath<
-							PropertyOf<BaseType, Extract<Head, string>, Options>,
-							Extract<Tail, string[]>,
-							Options
-						>
-					>
-				: GetWithPath<
+					GetWithPath<
 						PropertyOf<BaseType, Extract<Head, string>, Options>,
 						Extract<Tail, string[]>,
 						Options
 					>
+				>
+				: GetWithPath<
+					PropertyOf<BaseType, Extract<Head, string>, Options>,
+					Extract<Tail, string[]>,
+					Options
+				>
 		: never;
 
 type Strictify<
@@ -86,9 +86,9 @@ type PropertyOf<
 						: unknown
 				: PropertyOf<BaseType[number], Key, Options>
 			: BaseType extends {
-						[n: number]: infer Item;
-						length: number;
-					}
+				[n: number]: infer Item;
+				length: number;
+			}
 				? ConsistsOnlyOf<Key, StringDigit> extends true
 					? Strictify<Item, Options>
 					: unknown

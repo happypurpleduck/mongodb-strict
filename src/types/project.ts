@@ -1,10 +1,10 @@
 import type { ConditionalKeys, IsTuple } from "type-fest";
-import type { Paths } from "./path.ts";
-import type { OmitDeep } from "./omit-deep.ts";
-import type { PickDeep } from "./pick-deep.ts";
-import type { Get } from "./get.ts";
-import type { PathsOfType } from "./path-of-type.ts";
 import type { BuildDotObject } from "./build-dot-object.ts";
+import type { Get } from "./get.ts";
+import type { OmitDeep } from "./omit-deep.ts";
+import type { PathsOfType } from "./path-of-type.ts";
+import type { Paths } from "./path.ts";
+import type { PickDeep } from "./pick-deep.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
 type ProjectionBoolean = 0 | 1 | boolean;
@@ -13,10 +13,10 @@ type ProjectionBoolean = 0 | 1 | boolean;
 export type Projection<T> =
 	// TODO: prevent ProjectionBoolean from non Paths<T>
 	| {
-			[K in Paths<T> | (string & {})]?:
-				| ProjectionBoolean
-				| ProjectionPipeline<T>;
-	  }
+		[K in Paths<T> | (string & {})]?:
+			| ProjectionBoolean
+			| ProjectionPipeline<T>;
+	}
 	| undefined;
 
 export type ProjectionPipeline<T> =
@@ -30,29 +30,29 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 	: SimplifyDeep<
 			(keyof TP extends ConditionalKeys<TP, 0 | false>
 				? OmitDeep<
-						T,
-						// @ts-expect-error
-						ConditionalKeys<TP, 0 | false>
-					>
+					T,
+					// @ts-expect-error
+					ConditionalKeys<TP, 0 | false>
+				>
 				: ConditionalKeys<TP, 0 | false> extends "_id"
 					? PickDeep<
-							T, //@ts-expect-error
-							| ConditionalKeys<TP, 1 | true>
-							| ("_id" extends keyof TP
-									? TP["_id"] extends 0 | string
-										? never
-										: "_id"
-									: "_id")
-						>
+						T, // @ts-expect-error
+						| ConditionalKeys<TP, 1 | true>
+						| ("_id" extends keyof TP
+							? TP["_id"] extends 0 | false | string
+								? never
+								: "_id"
+							: "_id")
+					>
 					: unknown) &
-				(TP extends {} ? BuildDotObject<ProjectionPipelineType<T, TP>> : never)
-		>;
+					(TP extends {} ? BuildDotObject<ProjectionPipelineType<T, TP>> : never)
+	>;
 
 export type ProjectionPipelineType<T, TP extends {}> = ProjectionPipelinePath<
 	T,
 	TP
 > &
-	ProjectionPipelinePipes<T, TP>;
+ProjectionPipelinePipes<T, TP>;
 
 export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
 	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
@@ -67,7 +67,7 @@ export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
 
 export type ProjectionPipelinePipes<T, TP> = {
 	[K in ConditionalKeys<TP, Record<string, any>> &
-		(keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
+	(keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
 };
 
 export type ProjectionPipelineTypePipesInternal<T, TT> = //
@@ -75,10 +75,10 @@ export type ProjectionPipelineTypePipesInternal<T, TT> = //
 		$arrayElemAt: [`$${infer KK}`, infer Index extends number];
 	}
 		? // TODO: support tuple and tuple with negative index
-			Get<T, KK> extends any[]
+		Get<T, KK> extends any[]
 			?
-					| Get<T, KK>[Index]
-					| (IsTuple<Get<T, KK>> extends true ? never : undefined)
+			| Get<T, KK>[Index]
+			| (IsTuple<Get<T, KK>> extends true ? never : undefined)
 			: never
 		: TT extends { $literal: infer V }
 			? V

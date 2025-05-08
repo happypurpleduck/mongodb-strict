@@ -1,7 +1,7 @@
 import type { Decimal128, ObjectId } from "mongodb";
-import { expectTypeOf } from "vitest";
-import type { TItem } from "./item.ts";
 import type { OmitDeep } from "../types/omit-deep.ts";
+import type { TItem } from "./item.ts";
+import { expectTypeOf } from "vitest";
 
 expectTypeOf<OmitDeep<TItem, never>>().toEqualTypeOf<TItem>();
 
@@ -58,13 +58,13 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"_id"
 	>
@@ -84,23 +84,23 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"_id"
 	>
 >().toEqualTypeOf<
 	| {
-			type: 1;
-			value1: ObjectId;
-	  }
+		type: 1;
+		value1: ObjectId;
+	}
 	| {
-			type: 2;
-			value2: ObjectId;
-	  }
+		type: 2;
+		value2: ObjectId;
+	}
 >();

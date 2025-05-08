@@ -1,8 +1,8 @@
 import type { Decimal128, ObjectId } from "mongodb";
-import { expectTypeOf } from "vitest";
-import type { TItem } from "./item.ts";
-import type { PickDeep } from "../types/pick-deep.ts";
 import type { PickDeep as PickDeepOriginal } from "type-fest";
+import type { PickDeep } from "../types/pick-deep.ts";
+import type { TItem } from "./item.ts";
+import { expectTypeOf } from "vitest";
 
 expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<never>();
 
@@ -44,15 +44,15 @@ expectTypeOf<
 expectTypeOf<
 	PickDeep<
 		| {
-				_id: ObjectId;
-		  }
+			_id: ObjectId;
+		}
 		| ({
-				type: 1;
-				value1: ObjectId;
-		  } & {
-				type: 2;
-				value2: ObjectId;
-		  }),
+			type: 1;
+			value1: ObjectId;
+		} & {
+			type: 2;
+			value2: ObjectId;
+		}),
 		"_id"
 	>
 >().toEqualTypeOf<{
@@ -65,13 +65,13 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"type"
 	>
@@ -85,13 +85,13 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"type" | "value1" | "value2"
 	>
@@ -107,13 +107,13 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"type" | "value1" | "value2"
 	>
@@ -129,13 +129,13 @@ expectTypeOf<
 			_id: ObjectId;
 		} & (
 			| {
-					type: 1;
-					value1: ObjectId;
-			  }
+				type: 1;
+				value1: ObjectId;
+			}
 			| {
-					type: 2;
-					value2: ObjectId;
-			  }
+				type: 2;
+				value2: ObjectId;
+			}
 		),
 		"type" | "value1" | "value2"
 	>

@@ -1,6 +1,6 @@
-import { expectTypeOf } from "vitest";
 import type { Paths } from "../types/path.ts";
 import type { TItem } from "./item.ts";
+import { expectTypeOf } from "vitest";
 
 expectTypeOf<Paths<TItem>>().toEqualTypeOf<
 	| "_id"
