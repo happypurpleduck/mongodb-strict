@@ -22,7 +22,7 @@
 	"module": "src/index.ts",
 	"files": ["./src/*.ts", "./src/types/*.ts"],
 	"scripts": {
-		"type-check": "tsc",
+		"check": "tsc --noEmit",
 		"test": "vitest --typecheck",
 		"lint": "eslint src --fix"
 	},

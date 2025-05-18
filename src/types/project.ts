@@ -25,7 +25,7 @@ export type ProjectionPipeline<T> =
 	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] }
 	| { [K in string]: ProjectionPipeline<T> };
 
-export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
+export type ProjectionType<T, TP extends Projection<T>> = undefined extends TP
 	? SimplifyDeep<T>
 	: SimplifyDeep<
 			(keyof TP extends ConditionalKeys<TP, 0 | false>
@@ -40,8 +40,8 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 								: "_id"
 							: "_id")
 					>
-					: unknown) &
-					BuildDotObject<ProjectionPipelineType<T, TP>>
+					: unknown)
+				& BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
 export type ProjectionPipelineType<T, TP> = ProjectionPipelinePath<T, TP> &

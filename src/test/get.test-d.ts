@@ -8,6 +8,7 @@ expectTypeOf<Get<TItem, "name.en">>().toEqualTypeOf<TItem["name"]["en"]>();
 expectTypeOf<Get<TItem, "name.ar">>().toEqualTypeOf<TItem["name"]["ar"]>();
 expectTypeOf<Get<TItem, "price">>().toEqualTypeOf<TItem["price"]>();
 expectTypeOf<Get<TItem, "tag">>().toEqualTypeOf<TItem["tag"]>();
+expectTypeOf<Get<TItem, "tag.0">>().toEqualTypeOf<TItem["tag"][0]>();
 expectTypeOf<Get<TItem, "options">>().toEqualTypeOf<TItem["options"]>();
 expectTypeOf<Get<TItem, "options.0">>().toEqualTypeOf<
 	TItem["options"][0] | undefined
