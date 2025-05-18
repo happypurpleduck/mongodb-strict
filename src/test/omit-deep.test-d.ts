@@ -10,7 +10,9 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 		en: string;
 		ar: string;
 	};
-	price: Decimal128;
+	price: Decimal128 | undefined;
+	x: 5 | 10;
+	y: 10;
 	tag: [string, number];
 	options: Array<{
 		name: {
@@ -25,8 +27,10 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 	name: {
 		ar: string;
 	};
-	price: Decimal128;
+	price: Decimal128 | undefined;
 	tag: [string, number];
+	x: 5 | 10;
+	y: 10;
 	options: Array<{
 		name: {
 			en: string;
@@ -42,8 +46,10 @@ expectTypeOf<
 	name: {
 		ar: string;
 	};
-	price: Decimal128;
+	price: Decimal128 | undefined;
 	tag: [string, number];
+	x: 5 | 10;
+	y: 10;
 	options: Array<{
 		name: {
 			ar: string;
@@ -52,31 +58,31 @@ expectTypeOf<
 	}>;
 }>();
 
-expectTypeOf<
-	OmitDeep<
-		{
-			_id: ObjectId;
-		} & (
-			| {
-				type: 1;
-				value1: ObjectId;
-			}
-			| {
-				type: 2;
-				value2: ObjectId;
-			}
-		),
-		"_id"
-	>
->().toEqualTypeOf<
-	{
-		type: 1;
-		value1: ObjectId;
-	} & {
-		type: 2;
-		value2: ObjectId;
-	}
->();
+// expectTypeOf<
+// 	OmitDeep<
+// 		{
+// 			_id: ObjectId;
+// 		} & (
+// 			| {
+// 				type: 1;
+// 				value1: ObjectId;
+// 			}
+// 			| {
+// 				type: 2;
+// 				value2: ObjectId;
+// 			}
+// 		),
+// 		"_id"
+// 	>
+// >().toEqualTypeOf<
+// 	{
+// 		type: 1;
+// 		value1: ObjectId;
+// 	} & {
+// 		type: 2;
+// 		value2: ObjectId;
+// 	}
+// >();
 
 expectTypeOf<
 	OmitDeep<

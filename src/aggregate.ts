@@ -3,8 +3,8 @@ import type { Except } from "type-fest";
 import type { BuildDotObject } from "./types/build-dot-object.ts";
 import type {
 	Filter,
-	TLiteralsFilter,
-	TLiteralsFilterType,
+	LiteralsFilter,
+	LiteralsFilterType,
 } from "./types/filter.ts";
 import type { Get } from "./types/get.ts";
 import type { OmitDeep } from "./types/omit-deep.ts";
@@ -39,7 +39,7 @@ export class Aggregate<T> {
 		this.options = options;
 	}
 
-	match(match: Filter<T>) {
+	match(match: Filter<T>): this {
 		this.pipeline.push({
 			$match: match,
 		});
@@ -47,12 +47,12 @@ export class Aggregate<T> {
 		return this;
 	}
 
-	unionMatch<const TFilter extends TLiteralsFilter<T>>(match: TFilter) {
+	unionMatch<const TFilter extends LiteralsFilter<T>>(match: TFilter) {
 		this.pipeline.push({
 			$match: match,
 		});
 
-		return this as unknown as Aggregate<T & TLiteralsFilterType<T, TFilter>>;
+		return this as unknown as Aggregate<T & LiteralsFilterType<T, TFilter>>;
 	}
 
 	// TODO:
@@ -60,7 +60,7 @@ export class Aggregate<T> {
 		sort: {
 			[K in Paths<T>]?: -1 | 1;
 		},
-	) {
+	): this {
 		this.pipeline.push({ $sort: sort });
 
 		return this;
@@ -69,12 +69,11 @@ export class Aggregate<T> {
 	lookup<
 		TC,
 		const TLocalField extends Paths<T>,
-		/** @ts-expect-error */
 		const TLocalPropType extends Singular<Get<T, TLocalField>>,
 		const TField extends string,
 		const TResult = TC,
 	>(lookup: {
-		// @ts-expect-error
+		// @ts-expect-error enforce any
 		from: Collection<TC>;
 		localField: TLocalField;
 		foreignField: PathsOfType<NoInfer<TC>, TLocalPropType>;
@@ -258,11 +257,7 @@ export class Aggregate<T> {
 
 		return this as unknown as Aggregate<
 			// TODO: this probably does not need OmitDeep
-			OmitDeep<
-				T,
-				// @ts-expect-error
-				keyof TFields
-			> &
+			OmitDeep<T, keyof TFields> &
 			BuildDotObject<ProjectionPipelineType<T, TFields>>
 		>;
 	}
@@ -279,12 +274,12 @@ export class Aggregate<T> {
 		return this as unknown as Aggregate<Get<T, TField>>;
 	}
 
-	next() {
+	next(): Promise<T | null> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).next();
 	}
 
-	toArray() {
+	toArray(): Promise<T[]> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).toArray();
 	}

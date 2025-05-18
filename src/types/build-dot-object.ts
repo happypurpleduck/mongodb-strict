@@ -1,5 +1,7 @@
+import type { EmptyObject } from "type-fest";
+
 export type BuildDotObject<T extends Record<PropertyKey, any>> =
-	keyof T extends never
+	T extends EmptyObject
 		? unknown
 		: {
 				[K in keyof T]: BuildDotObjectHelper<K, T[K]>;

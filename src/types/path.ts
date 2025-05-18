@@ -1,4 +1,5 @@
 import type {
+	EmptyObject,
 	GreaterThan,
 	IsAny,
 	Subtract,
@@ -7,27 +8,30 @@ import type {
 import type {
 	StaticPartOfArray,
 	VariablePartOfArray,
-} from "type-fest/source/internal/array.d.ts";
-import type { ExtendedPrimitive } from "./primitives.ts";
+} from "type-fest/source/internal/array.js";
+import type { ExtendedPrimitive } from "./primitives.js";
 
-interface PathsOptions {
+export interface PathsOptions {
 	maxRecursionDepth?: number;
+}
+
+interface DefaultPathsOptions {
+	maxRecursionDepth: 10;
 }
 
 export type Paths<T, Options extends PathsOptions = {}> = _Paths<
 	T,
 	{
-		// Set default maxRecursionDepth to 10
 		maxRecursionDepth: Options["maxRecursionDepth"] extends number
 			? Options["maxRecursionDepth"]
-			: 10;
+			: DefaultPathsOptions["maxRecursionDepth"];
 	}
 >;
 
-type _Paths<T, Options extends Required<PathsOptions>> = T extends
-	| ExtendedPrimitive
-	| ReadonlyMap<unknown, unknown>
-	| ReadonlySet<unknown>
+type _Paths<
+	T,
+	Options extends Required<PathsOptions>,
+> = T extends ExtendedPrimitive
 	? never
 	: IsAny<T> extends true
 		? never
@@ -43,23 +47,25 @@ type _Paths<T, Options extends Required<PathsOptions>> = T extends
 				: never;
 
 type InternalPaths<
+	// eslint-disable-next-line unused-imports/no-unused-vars
 	T,
 	Options extends Required<PathsOptions>,
 > = Options["maxRecursionDepth"] extends infer MaxDepth extends number
 	? Required<T> extends infer T
-		? T extends readonly []
-			? never // TODO: <-- check
+		? T extends EmptyObject | readonly []
+			? never
 			: {
 					[Key in keyof T]: Key extends string | number
 						?
 						| Key
-						| (GreaterThan<MaxDepth, 0> extends true
+								// Recursively generate paths for the current key
+						| (GreaterThan<MaxDepth, 0> extends true // Limit the depth to prevent infinite recursion
 							? _Paths<
 								T[Key],
 								{ maxRecursionDepth: Subtract<MaxDepth, 1> }
 							> extends infer SubPath
 								? SubPath extends string | number
-									? `${Key}.${SubPath}`
+									? never | `${Key}.${SubPath}`
 									: never
 								: never
 							: never)

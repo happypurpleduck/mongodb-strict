@@ -29,11 +29,7 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 	? SimplifyDeep<T>
 	: SimplifyDeep<
 			(keyof TP extends ConditionalKeys<TP, 0 | false>
-				? OmitDeep<
-					T,
-					// @ts-expect-error
-					ConditionalKeys<TP, 0 | false>
-				>
+				? OmitDeep<T, ConditionalKeys<TP, 0 | false>>
 				: ConditionalKeys<TP, 0 | false> extends "_id"
 					? PickDeep<
 						T, // @ts-expect-error
@@ -45,16 +41,13 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 							: "_id")
 					>
 					: unknown) &
-					(TP extends {} ? BuildDotObject<ProjectionPipelineType<T, TP>> : never)
+					BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
-export type ProjectionPipelineType<T, TP extends {}> = ProjectionPipelinePath<
-	T,
-	TP
-> &
-ProjectionPipelinePipes<T, TP>;
+export type ProjectionPipelineType<T, TP> = ProjectionPipelinePath<T, TP> &
+	ProjectionPipelinePipes<T, TP>;
 
-export type ProjectionPipelinePath<T, TP extends Record<string, any>> = {
+export type ProjectionPipelinePath<T, TP> = {
 	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
 		? Get<T, KK>
 		: never;
@@ -85,24 +78,21 @@ export type ProjectionPipelineTypePipesInternal<T, TT> = //
 			: never;
 
 // TODO: convert to tests
-
-type A = ProjectionType<{ x: 5; y: 1 }, { x: 1 }>;
-//   ^?
-type B = ProjectionType<{ x: 5; y: 1 }, { "z.a": "$x" }>;
-//   ^?
-type C = ProjectionType<{ x: 5; y: 1 }, { x: 1; z: "$x" }>;
-//   ^?
-type D = ProjectionType<{ x: 5; y: 1 }, {}>;
-//   ^?
-type E = ProjectionType<{ x: 5; y: 1 }, { x: 0 }>;
-//   ^?
-type F = ProjectionType<{ x: 5; y: 1 }, { a: { $literal: "a" } }>;
-//   ^?
-type G = ProjectionType<{ x: 5; y: 1 }, { x: { $literal: "a" } }>;
-//   ^?
-type H = ProjectionType<{ x: 5; y: 1 }, { x: 1; a: { $literal: "a" } }>;
-//   ^?
-type I = ProjectionType<{ x: 5; y: 1 }, { y: 1; x: { $literal: "a" } }>;
-//   ^?
-
-//
+// type A = ProjectionType<{ x: 5; y: 1 }, { x: 1 }>;
+// //   ^?
+// type B = ProjectionType<{ x: 5; y: 1 }, { "z.a": "$x" }>;
+// //   ^?
+// type C = ProjectionType<{ x: 5; y: 1 }, { x: 1; z: "$x" }>;
+// //   ^?
+// type D = ProjectionType<{ x: 5; y: 1 }, {}>;
+// //   ^?
+// type E = ProjectionType<{ x: 5; y: 1 }, { x: 0 }>;
+// //   ^?
+// type F = ProjectionType<{ x: 5; y: 1 }, { a: { $literal: "a" } }>;
+// //   ^?
+// type G = ProjectionType<{ x: 5; y: 1 }, { x: { $literal: "a" } }>;
+// //   ^?
+// type H = ProjectionType<{ x: 5; y: 1 }, { x: 1; a: { $literal: "a" } }>;
+// //   ^?
+// type I = ProjectionType<{ x: 5; y: 1 }, { y: 1; x: { $literal: "a" } }>;
+// //   ^?

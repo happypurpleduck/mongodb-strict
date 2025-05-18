@@ -2,18 +2,24 @@ import type {
 	BulkWriteOptions,
 	Collection,
 	DeleteOptions,
+	DeleteResult,
 	FindOneAndDeleteOptions,
 	FindOneAndReplaceOptions,
 	FindOneAndUpdateOptions,
 	FindOptions,
+	InsertManyResult,
 	InsertOneOptions,
-	UpdateFilter,
+	InsertOneResult,
+	ModifyResult,
 	UpdateOptions,
+	UpdateResult,
 	WithoutId,
 } from "mongodb";
 import type { TDocument } from "./document.ts";
-import type { Filter } from "./types/filter.ts";
+import type { Filter, LiteralsFilterType } from "./types/filter.ts";
+
 import type { Projection, ProjectionType } from "./types/project.ts";
+import type { UpdateFilter } from "./types/update-filter.ts";
 
 export class TypedCollection<T extends TDocument> {
 	collection: Collection<T>;
@@ -22,82 +28,146 @@ export class TypedCollection<T extends TDocument> {
 		this.collection = collection;
 	}
 
-	find<const TProjection extends Projection<T>>(
-		filter: Filter<T>,
+	// TODO: extend Find Cursor?
+	// find<
+	// 	const TFilter extends Filter<T>,
+	// 	const TFiltered = T & LiteralsFilterType<T, TFilter>,
+	// 	const TProjection extends Projection<TFiltered> = undefined,
+	// >(
+	// 	filter: TFilter,
+	// 	options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
+	// ): FindCursor<ProjectionType<TFiltered, TProjection>> {
+	// 	// @ts-ignore trust me
+	// 	return this.collection.find(
+	// 		// @ts-ignore trust me
+	// 		filter,
+	// 		options,
+	// 	);
+	// }
+
+	async findAll<
+		const TFilter extends Filter<T>,
+		const TFiltered = T & LiteralsFilterType<T, TFilter>,
+		const TProjection extends Projection<TFiltered> = undefined,
+	>(
+		this: TypedCollection<T>,
+		filter: TFilter,
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
-	) {
-		return this.collection.find<ProjectionType<T, TProjection>>(
-			// @ts-expect-error
+	): Promise<ProjectionType<TFiltered, TProjection>[]> {
+		// @ts-expect-error trust me
+		return this.collection
+			.find(
+				// @ts-expect-error trust me
+				filter,
+				options,
+			)
+			.toArray();
+	}
+
+	findOne<
+		const TFilter extends Filter<T>,
+		const TFiltered = T & LiteralsFilterType<T, TFilter>,
+		const TProjection extends Projection<TFiltered> = undefined,
+	>(
+		filter: TFilter,
+		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
+	): Promise<ProjectionType<TFiltered, TProjection> | null> {
+		// @ts-ignore trust me
+		return this.collection.findOne(
+			// @ts-ignore trust me
 			filter,
 			options,
 		);
 	}
 
-	findOne<const TProjection extends Projection<T>>(
-		filter: Filter<T>,
-		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
-	) {
-		return this.collection.findOne<ProjectionType<T, TProjection>>(
-			// @ts-expect-error
-			filter,
-			options,
-		);
-	}
-
-	findOneAndUpdate<const TProjection extends Projection<T>>(
+	findOneAndUpdate<
+		const TFilter extends Filter<T>,
+		const TFiltered = T & LiteralsFilterType<T, TFilter>,
+		const TProjection extends Projection<TFiltered> = undefined,
+		const TResultMeta extends boolean = false,
+	>(
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
-		options?: FindOneAndUpdateOptions & { projection?: TProjection },
-	) {
-		return (
-			this.collection as unknown as Collection<ProjectionType<T, TProjection>>
-		).findOneAndUpdate(
-			// @ts-expect-error
+		options?: Omit<
+			FindOneAndUpdateOptions,
+			"projection" | "includeResultMetadata"
+		> & {
+			projection?: TProjection;
+			includeResultMetadata?: TResultMeta;
+		},
+	): TResultMeta extends true ? Promise<ModifyResult<T>> : Promise<T | null> {
+		// @ts-ignore trust me
+		return this.collection.findOneAndUpdate(
+			// @ts-ignore trust me
 			filter,
 			update,
 			options,
 		);
 	}
 
-	findOneAndReplace<const TProjection extends Projection<T>>(
+	findOneAndReplace<
+		const TFilter extends Filter<T>,
+		const TFiltered = T & LiteralsFilterType<T, TFilter>,
+		const TProjection extends Projection<TFiltered> = undefined,
+		const TResultMeta extends boolean = false,
+	>(
 		filter: Filter<T>,
+		// TODO: use better omit? WithoutId might break union types (uses Omit).
 		update: WithoutId<T>,
-		options?: FindOneAndReplaceOptions & { projection?: TProjection },
-	) {
-		return (
-			this.collection as unknown as Collection<ProjectionType<T, TProjection>>
-		).findOneAndReplace(
-			// @ts-expect-error
+		options?: Omit<
+			FindOneAndReplaceOptions,
+			"projection" | "includeResultMetadata"
+		> & {
+			projection?: TProjection;
+			includeResultMetadata?: TResultMeta;
+		},
+	): TResultMeta extends true ? Promise<ModifyResult<T>> : Promise<T | null> {
+		// @ts-ignore trust me
+		return this.collection.findOneAndReplace(
+			// @ts-ignore trust me
 			filter,
 			update,
 			options,
 		);
 	}
 
-	findOneAndDelete<const TProjection extends Projection<T>>(
+	findOneAndDelete<
+		const TFilter extends Filter<T>,
+		const TFiltered = T & LiteralsFilterType<T, TFilter>,
+		const TProjection extends Projection<TFiltered> = undefined,
+		const TResultMeta extends boolean = false,
+	>(
 		filter: Filter<T>,
-		options?: FindOneAndDeleteOptions & { projection: TProjection },
-	) {
-		return (
-			this.collection as unknown as Collection<ProjectionType<T, TProjection>>
-		).findOneAndDelete(
-			// @ts-expect-error
+		options?: Omit<
+			FindOneAndDeleteOptions,
+			"projection" | "includeResultMetadata"
+		> & {
+			projection?: TProjection;
+			includeResultMetadata?: TResultMeta;
+		},
+	): TResultMeta extends true ? Promise<ModifyResult<T>> : Promise<T | null> {
+		// @ts-expect-error
+		return this.collection.findOneAndDelete(
+			// @ts-ignore trust me
 			filter,
 			options,
 		);
 	}
 
-	insertOne(doc: T, options?: InsertOneOptions) {
+	insertOne(doc: T, options?: InsertOneOptions): Promise<InsertOneResult<T>> {
 		return this.collection.insertOne(
-			// @ts-expect-error
+			// @ts-ignore trust me
 			doc,
 			options,
 		);
 	}
 
-	insertMany(docs: T[], options?: BulkWriteOptions) {
+	insertMany(
+		docs: T[],
+		options?: BulkWriteOptions,
+	): Promise<InsertManyResult<T>> {
 		return this.collection.insertMany(
-			// @ts-expect-error
+			// @ts-ignore
 			docs,
 			options,
 		);
@@ -107,7 +177,7 @@ export class TypedCollection<T extends TDocument> {
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
-	) {
+	): Promise<UpdateResult<T>> {
 		return this.collection.updateOne(
 			// @ts-expect-error
 			filter,
@@ -120,7 +190,7 @@ export class TypedCollection<T extends TDocument> {
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
-	) {
+	): Promise<UpdateResult<T>> {
 		return this.collection.updateMany(
 			// @ts-expect-error
 			filter,
@@ -129,7 +199,7 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	deleteOne(filter: Filter<T>, options?: DeleteOptions) {
+	deleteOne(filter: Filter<T>, options?: DeleteOptions): Promise<DeleteResult> {
 		return this.collection.deleteOne(
 			// @ts-expect-error
 			filter,
@@ -137,7 +207,10 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	deleteMany(filter: Filter<T>, options?: DeleteOptions) {
+	deleteMany(
+		filter: Filter<T>,
+		options?: DeleteOptions,
+	): Promise<DeleteResult> {
 		return this.collection.deleteMany(
 			// @ts-expect-error
 			filter,
@@ -145,3 +218,8 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 }
+
+/*
+TODOs:
+- check instead of `Omit<FindOptions, "projection"> & { projection?: TProjection }` use `interface TFindOptions<Projection> extends Omit<FindOptions, "projection"> { projection: Projection }`
+*/

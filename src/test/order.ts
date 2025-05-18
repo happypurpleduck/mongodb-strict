@@ -20,4 +20,6 @@ export type TOrder = TDocument & {
 	}
 	);
 
-export const Order = new TypedCollection<TOrder>(database.collection("order"));
+export const Order: TypedCollection<TOrder> = new TypedCollection(
+	database.collection("order"),
+);

@@ -8,7 +8,7 @@ export interface TItem extends TDocument {
 		en: string;
 		ar: string;
 	};
-	price: Decimal128;
+	price: Decimal128 | undefined;
 	x: 5 | 10;
 	y: 10;
 	tag: [string, number];
@@ -21,4 +21,6 @@ export interface TItem extends TDocument {
 	}>;
 }
 
-export const Item = new TypedCollection<TItem>(database.collection("item"));
+export const Item: TypedCollection<TItem> = new TypedCollection(
+	database.collection("item"),
+);

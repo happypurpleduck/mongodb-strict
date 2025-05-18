@@ -1,3 +1,5 @@
+import type { Db } from "mongodb";
+import process from "node:process";
 import { MongoClient } from "mongodb";
 
 const DATABASE_CONNECTION_URI = process.env.DATABASE_CONNECTION_URI;
@@ -10,7 +12,7 @@ if (!DATABASE_NAME) {
 	throw new Error("DATABASE_NAME missing");
 }
 
-export const client = new MongoClient(DATABASE_CONNECTION_URI);
+export const client: MongoClient = new MongoClient(DATABASE_CONNECTION_URI);
 await client.connect();
 
-export const database = client.db(DATABASE_NAME);
+export const database: Db = client.db(DATABASE_NAME);

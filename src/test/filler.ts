@@ -32,6 +32,9 @@ function create_item(): TItem {
 			/* this currently is just english */
 			ar: ar.food.dish(),
 		},
+		x: 5,
+		y: 10,
+		tag: ["string", 5],
 		price: new Decimal128(
 			en.number
 				.float({
@@ -49,7 +52,9 @@ await Item.deleteMany({});
 console.timeEnd("reset");
 
 console.time("fake");
-const items = Array.from({ length: 100_000 }).fill(0).map(() => create_item());
+const items = Array.from({ length: 100_000 })
+	.fill(0)
+	.map(() => create_item());
 console.timeEnd("fake");
 
 console.time("insert");

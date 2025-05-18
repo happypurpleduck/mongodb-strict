@@ -4,6 +4,8 @@ import { expectTypeOf } from "vitest";
 
 expectTypeOf<Paths<TItem>>().toEqualTypeOf<
 	| "_id"
+	| "x"
+	| "y"
 	| "name"
 	| "name.en"
 	| "name.ar"

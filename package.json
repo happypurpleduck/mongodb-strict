@@ -20,13 +20,11 @@
 		}
 	},
 	"module": "src/index.ts",
-	"files": [
-		"./src/*.ts",
-		"./src/types/*.ts"
-	],
+	"files": ["./src/*.ts", "./src/types/*.ts"],
 	"scripts": {
 		"type-check": "tsc",
-		"test": "vitest --typecheck"
+		"test": "vitest --typecheck",
+		"lint": "eslint src --fix"
 	},
 	"peerDependencies": {
 		"mongodb": "^6.13.0",
@@ -42,9 +40,5 @@
 		"eslint": "^9.26.0",
 		"vitest": "^3.1.1"
 	},
-	"trustedDependencies": [
-		"@biomejs/biome",
-		"esbuild",
-		"unrs-resolver"
-	]
+	"trustedDependencies": ["@biomejs/biome", "esbuild", "unrs-resolver"]
 }

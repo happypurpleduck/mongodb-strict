@@ -7,28 +7,30 @@ interface GetOptions {
 
 type GetWithPath<
 	BaseType,
-	Keys,
+	Keys extends readonly string[],
 	Options extends GetOptions = {},
-> = Keys extends readonly []
+> = Keys extends UnknownArray
 	? BaseType
 	: Keys extends readonly [infer Head, ...infer Tail]
 		? Head extends `${number}`
 			? GetWithPath<
 				PropertyOf<BaseType, Extract<Head, string>, Options>,
-				Extract<Tail, string[]>,
+				Extract<Tail, readonly string[]>,
 				Options
 			>
 			: BaseType extends UnknownArray
-				? Array<
-					GetWithPath<
-						PropertyOf<BaseType, Extract<Head, string>, Options>,
-						Extract<Tail, string[]>,
-						Options
+				? BaseType[number] extends object
+					? Array<
+						GetWithPath<
+							PropertyOf<BaseType[number], Extract<Head, string>, Options>,
+							Extract<Tail, readonly string[]>,
+							Options
+						>
 					>
-				>
+					: never
 				: GetWithPath<
 					PropertyOf<BaseType, Extract<Head, string>, Options>,
-					Extract<Tail, string[]>,
+					Extract<Tail, readonly string[]>,
 					Options
 				>
 		: never;
@@ -63,10 +65,10 @@ type WithStringKeys<BaseType> = {
 	[Key in StringKeyOf<BaseType>]: UncheckedIndex<BaseType, Key>;
 };
 
-type UncheckedIndex<T, U extends string | number> = [T] extends [
+type UncheckedIndex<T, K extends string | number> = [T] extends [
 	Record<string | number, any>,
 ]
-	? T[U]
+	? T[K]
 	: never;
 
 type PropertyOf<
@@ -77,14 +79,16 @@ type PropertyOf<
 	? undefined
 	: Key extends keyof BaseType
 		? StrictPropertyOf<BaseType, Key, Options>
-		: BaseType extends readonly unknown[]
+		: BaseType extends UnknownArray
 			? Key extends `${number}`
 				? number extends BaseType["length"]
 					? Strictify<BaseType[number], Options>
 					: Key extends keyof BaseType
 						? Strictify<BaseType[Key & keyof BaseType], Options>
 						: unknown
-				: PropertyOf<BaseType[number], Key, Options>
+				: Key extends keyof BaseType[number]
+					? PropertyOf<BaseType[number], Key, Options>
+					: unknown
 			: BaseType extends {
 				[n: number]: infer Item;
 				length: number;
@@ -94,10 +98,10 @@ type PropertyOf<
 					: unknown
 				: Key extends keyof WithStringKeys<BaseType>
 					? StrictPropertyOf<WithStringKeys<BaseType>, Key, Options>
-					: never;
+					: unknown;
 
 export type Get<
 	BaseType,
-	Path extends string,
+	Path extends PropertyKey,
 	Options extends GetOptions = {},
-> = GetWithPath<BaseType, ToPath<Path>, Options>;
+> = Path extends string ? GetWithPath<BaseType, ToPath<Path>, Options> : never;

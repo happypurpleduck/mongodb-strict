@@ -14,7 +14,7 @@ import type { ExactKey } from "type-fest/source/internal/keys.d.ts";
 import type { ToString } from "type-fest/source/internal/string.d.ts";
 import type { ExtendedPrimitive } from "./primitives.ts";
 
-export type OmitDeep<T, PathUnion extends string> = SimplifyDeep<
+export type OmitDeep<T, PathUnion> = SimplifyDeep<
 	OmitDeepHelper<T, UnionToTuple<PathUnion>>,
 	UnknownArray | ExtendedPrimitive
 >;

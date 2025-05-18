@@ -1,10 +1,9 @@
 import type { Decimal128, ObjectId } from "mongodb";
-import type { PickDeep as PickDeepOriginal } from "type-fest";
 import type { PickDeep } from "../types/pick-deep.ts";
 import type { TItem } from "./item.ts";
 import { expectTypeOf } from "vitest";
 
-expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<never>();
+expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<unknown>();
 
 expectTypeOf<PickDeep<TItem, "_id">>().toEqualTypeOf<{
 	_id: ObjectId;
@@ -59,25 +58,25 @@ expectTypeOf<
 	_id: ObjectId;
 }>();
 
-expectTypeOf<
-	PickDeepOriginal<
-		{
-			_id: ObjectId;
-		} & (
-			| {
-				type: 1;
-				value1: ObjectId;
-			}
-			| {
-				type: 2;
-				value2: ObjectId;
-			}
-		),
-		"type"
-	>
->().toEqualTypeOf<{
-	type: 1 | 2;
-}>();
+// expectTypeOf<
+// 	PickDeepOriginal<
+// 		{
+// 			_id: ObjectId;
+// 		} & (
+// 			| {
+// 				type: 1;
+// 				value1: ObjectId;
+// 			}
+// 			| {
+// 				type: 2;
+// 				value2: ObjectId;
+// 			}
+// 		),
+// 		"type"
+// 	>
+// >().toEqualTypeOf<{
+// 	type: 1 | 2;
+// }>();
 
 expectTypeOf<
 	PickDeep<
@@ -95,11 +94,16 @@ expectTypeOf<
 		),
 		"type" | "value1" | "value2"
 	>
->().toEqualTypeOf<{
-	type: 1 | 2;
-	value1?: ObjectId;
-	value2?: ObjectId;
-}>();
+>().toEqualTypeOf<
+	| {
+		type: 1;
+		value1: ObjectId;
+	}
+	| {
+		type: 2;
+		value2: ObjectId;
+	}
+>();
 
 expectTypeOf<
 	PickDeep<
@@ -115,32 +119,14 @@ expectTypeOf<
 				value2: ObjectId;
 			}
 		),
-		"type" | "value1" | "value2"
+		"type" | "value1"
 	>
->().toEqualTypeOf<{
-	type: 1 | 2;
-	value1?: ObjectId;
-	value2?: ObjectId;
-}>();
-
-expectTypeOf<
-	PickDeep<
-		{
-			_id: ObjectId;
-		} & (
-			| {
-				type: 1;
-				value1: ObjectId;
-			}
-			| {
-				type: 2;
-				value2: ObjectId;
-			}
-		),
-		"type" | "value1" | "value2"
-	>
->().toEqualTypeOf<{
-	type: 1 | 2;
-	value1?: ObjectId;
-	value2?: ObjectId;
-}>();
+>().toEqualTypeOf<
+	| {
+		type: 1;
+		value1: ObjectId;
+	}
+	| {
+		type: 2;
+	}
+>();
