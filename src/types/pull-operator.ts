@@ -1,4 +1,5 @@
 import type { Flatten } from "mongodb";
+import type { FilterOperations } from "./filter-operation.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfType } from "./path-of-type.ts";
 
