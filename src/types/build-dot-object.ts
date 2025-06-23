@@ -1,11 +1,14 @@
-import type { EmptyObject } from "type-fest";
+import type { EmptyObject, UnionToIntersection } from "type-fest";
 
+// TODO: rewrite to not require UnionToIntersection
 export type BuildDotObject<T extends Record<PropertyKey, any>> =
 	T extends EmptyObject
 		? unknown
-		: {
+		: UnionToIntersection<
+			{
 				[K in keyof T]: BuildDotObjectHelper<K, T[K]>;
-			}[keyof T];
+			}[keyof T]
+		>;
 
 export type BuildDotObjectHelper<
 	Key extends PropertyKey,
