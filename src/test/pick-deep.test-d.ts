@@ -3,7 +3,7 @@ import type { PickDeep } from "../types/pick-deep.ts";
 import type { TItem } from "./item.ts";
 import { expectTypeOf } from "vitest";
 
-expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf<unknown>();
+expectTypeOf<PickDeep<TItem, never>>().toEqualTypeOf(null as never);
 
 expectTypeOf<PickDeep<TItem, "_id">>().toEqualTypeOf<{
 	_id: ObjectId;

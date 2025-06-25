@@ -8,7 +8,7 @@ import type { ExtendedPrimitive } from "./primitives.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
 export type PickDeep<T, PathUnion extends string> = [PathUnion] extends [never]
-	? unknown
+	? {}
 	: T extends ExtendedPrimitive
 		? never
 		: T extends UnknownArray

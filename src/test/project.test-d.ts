@@ -123,3 +123,12 @@ expectTypeOf<
 		}>;
 	}>
 >();
+
+expectTypeOf<ProjectionType<TItem, {
+	_id: 0;
+	tuple: ["$name", "$_id"];
+}>>().toEqualTypeOf<
+	Simplify<{
+		tuple: [{ en: string; ar: string }, ObjectId];
+	}>
+>();
