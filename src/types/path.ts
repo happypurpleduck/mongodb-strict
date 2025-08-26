@@ -16,7 +16,7 @@ export interface PathsOptions {
 }
 
 interface DefaultPathsOptions {
-	maxRecursionDepth: 10;
+	maxRecursionDepth: 5;
 }
 
 export type Paths<T, Options extends PathsOptions = {}> = _Paths<
@@ -37,8 +37,7 @@ type _Paths<
 		? never
 		: T extends UnknownArray
 			? number extends T["length"]
-				?
-				| InternalPaths<T[number], Options>
+				? | InternalPaths<T[number], Options>
 				| InternalPaths<StaticPartOfArray<T>, Options>
 				| InternalPaths<Array<VariablePartOfArray<T>[number]>, Options>
 				: InternalPaths<T, Options>
@@ -56,8 +55,7 @@ type InternalPaths<
 			? never
 			: {
 					[Key in keyof T]: Key extends string | number
-						?
-						| Key
+						? | Key
 								// Recursively generate paths for the current key
 						| (GreaterThan<MaxDepth, 0> extends true // Limit the depth to prevent infinite recursion
 							? _Paths<

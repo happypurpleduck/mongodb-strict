@@ -7,24 +7,21 @@ import type { BuildTuple } from "type-fest/source/internal/tuple.d.ts";
 import type { ExtendedPrimitive } from "./primitives.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
+// Optimized version that computes UnionToIntersection once
+type PickDeepUnion<T, PathUnion extends string> = UnionToIntersection<
+	{
+		[P in PathUnion]: InternalPickDeep<T, P>;
+	}[PathUnion]
+>;
+
 export type PickDeep<T, PathUnion extends string> = [PathUnion] extends [never]
 	? {}
 	: T extends ExtendedPrimitive
 		? never
 		: T extends UnknownArray
-			? UnionToIntersection<
-				{
-					[P in PathUnion]: InternalPickDeep<T, P>;
-				}[PathUnion]
-			>
+			? PickDeepUnion<T, PathUnion>
 			: T extends object
-				? SimplifyDeep<
-					UnionToIntersection<
-						{
-							[P in PathUnion]: InternalPickDeep<T, P>;
-						}[PathUnion]
-					>
-				>
+				? SimplifyDeep<PickDeepUnion<T, PathUnion>>
 				: never;
 
 type InternalPickDeep<

@@ -14,21 +14,21 @@ type MapTupleToTypes<U, T extends readonly (keyof any)[]> = {
 type ProjectionBoolean = 0 | 1 | boolean;
 
 // TODO: handle projection pipelines.
-export type Projection<T> =
+export type Projection<T>
 	// TODO: prevent ProjectionBoolean from non Paths<T>
-	| {
+	= | {
 		[K in Paths<T> | (string & {})]?:
 			| ProjectionBoolean
 			| ProjectionPipeline<T>;
 	}
 	| undefined;
 
-export type ProjectionPipeline<T> =
-	| `$${Paths<T>}`
-	| { $literal: any }
-	| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] }
-	| { [K in string]: ProjectionPipeline<T> }
-	| ProjectionPipeline<T>[];
+export type ProjectionPipeline<T>
+	= | `$${Paths<T>}`
+		| { $literal: any }
+		| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] }
+		| { [K in string]: ProjectionPipeline<T> }
+		| ProjectionPipeline<T>[];
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 	? SimplifyDeep<T>
@@ -51,12 +51,12 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 				& BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
-export type ProjectionPipelineType<T, TP> =
-	ProjectionPipelinePath<T, TP>
-	& ProjectionPipelinePipes<T, TP>;
+export type ProjectionPipelineType<T, TP>
+	= ProjectionPipelinePath<T, TP>
+		& ProjectionPipelinePipes<T, TP>;
 
-export type ProjectionPipelinePath<T, TP> =
-	{
+export type ProjectionPipelinePath<T, TP>
+	= {
 		[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
 			? Get<T, KK>
 			: never;
@@ -75,14 +75,12 @@ export type ProjectionPipelinePipes<T, TP> = {
 	[K in ConditionalKeys<TP, Record<string, any>> & (keyof TP & `$${string}`) ]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
 };
 
-export type ProjectionPipelineTypePipesInternal<T, TT> = //
-	TT extends {
+export type ProjectionPipelineTypePipesInternal<T, TT> //
+	= TT extends {
 		$arrayElemAt: [`$${infer KK}`, infer Index extends number];
-	}
-		? // TODO: support tuple and tuple with negative index
-		Get<T, KK> extends any[]
-			?
-			| Get<T, KK>[Index]
+	} // TODO: support tuple and tuple with negative index
+		? Get<T, KK> extends any[]
+			? | Get<T, KK>[Index]
 			| (IsTuple<Get<T, KK>> extends true ? never : undefined)
 			: never
 		: TT extends { $literal: infer V }

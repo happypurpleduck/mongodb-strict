@@ -29,6 +29,7 @@ type GetWithPath<
 
 type ToPath<S extends string> = Split<S, ".">;
 
+// Simplified version - avoid deep recursion for digit checking
 type ConsistsOnlyOf<
 	LongString extends string,
 	Substring extends string,
@@ -48,6 +49,7 @@ type UncheckedIndex<T, K extends string | number> = [T] extends [
 	? T[K]
 	: never;
 
+// Optimized PropertyOf with flattened conditionals
 type PropertyOf<
 	BaseType,
 	Key extends string,
@@ -57,20 +59,13 @@ type PropertyOf<
 		? BaseType[Key]
 		: BaseType extends UnknownArray
 			? Key extends `${number}`
-				? number extends BaseType["length"]
-					? BaseType[number] | undefined
-					: Key extends keyof BaseType
-						? BaseType[Key & keyof BaseType]
-						: never
+				? BaseType[number] | undefined
 				: Key extends keyof BaseType[number]
 					? BaseType[number]
 					: never
-			: BaseType extends {
-				[n: number]: infer Item;
-				length: number;
-			}
+			: BaseType extends readonly unknown[]
 				? ConsistsOnlyOf<Key, StringDigit> extends true
-					? Item
+					? BaseType[number]
 					: never
 				: Key extends keyof WithStringKeys<BaseType>
 					? WithStringKeys<BaseType>[Key]

@@ -115,8 +115,8 @@ export class Aggregate<T> {
 		this.pipeline.push({ $unwind: unwind });
 
 		return this as unknown as Aggregate<
-			Except<T, TUnwrap> &
-			Record<
+			Except<T, TUnwrap>
+			& Record<
 				TUnwrap,
 				// @ts-expect-error
 				T[TUnwrap][number]
@@ -174,64 +174,43 @@ export class Aggregate<T> {
 					$accumulator: any;
 				}
 					? unknown
-					: /* add to set */
-					TFields[K] extends { $addToSet: `$${infer K2}` }
-						? Get<T, K2>[]
-						: /* $avg */
-						TFields[K] extends { $avg: `$${infer Z}` }
-							? NonNullable<Get<T, Z>>
-							: /* bottom */
-							TFields[K] extends { $bottom: any }
-								? unknown
-								: /* bottomN */
-								TFields[K] extends { $bottomN: any }
-									? unknown
-									: /* count */
-									TFields[K] extends { $count: any }
-										? number
-										: /* first */
-										TFields[K] extends { $first: `$${infer K2}` }
-											? K2 extends "$ROOT"
-												? T
-												: Get<T, K2>
-											: /* firstN */
-											TFields[K] extends { $first: any }
-												? unknown
-												: /* last */
-												TFields[K] extends { $last: `$${infer K2}` }
-													? K2 extends "$ROOT"
-														? T
-														: Get<T, K2>
-													: /* lastN */
-													TFields[K] extends { $lastN: any }
-														? unknown
-														: /* max */
-														TFields[K] extends { $max: `$${infer K2}` }
-															? Get<T, K2>
-															: /* maxN */
-															TFields[K] extends { $lastN: any }
-																? unknown
-																: /* push */
-																TFields[K] extends { $push: infer Z }
+					/* add to set */
+					: TFields[K] extends { $addToSet: `$${infer K2}` } ? Get<T, K2>[]
+					/* $avg */
+						: TFields[K] extends { $avg: `$${infer Z}` } ? NonNullable<Get<T, Z>>
+						/* bottom */
+							: TFields[K] extends { $bottom: any } ? unknown
+							/* bottomN */
+								: TFields[K] extends { $bottomN: any } ? unknown
+								/* count */
+									: TFields[K] extends { $count: any } ? number
+									/* first */
+										: TFields[K] extends { $first: `$${infer K2}` }
+											? K2 extends "$ROOT" ? T : Get<T, K2>
+										/* firstN */
+											: TFields[K] extends { $first: any } ? unknown
+											/* last */
+												: TFields[K] extends { $last: `$${infer K2}` }
+													? K2 extends "$ROOT" ? T : Get<T, K2>
+												/* lastN */
+													: TFields[K] extends { $lastN: any } ? unknown
+													/* max */
+														: TFields[K] extends { $max: `$${infer K2}` } ? Get<T, K2>
+														/* maxN */
+															: TFields[K] extends { $lastN: any } ? unknown
+															/* push */
+																: TFields[K] extends { $push: infer Z }
 																	? Z extends `$${infer K2}`
-																		? K2 extends "$ROOT"
-																			? T[]
-																			: Get<T, K2>[]
+																		? K2 extends "$ROOT" ? T[] : Get<T, K2>[]
 																		: Z extends Record<string, any>
 																			? {
-																					[K in keyof Z]: Z[K] extends `$${infer KK}`
-																						? Get<T, KK>
-																						: never;
+																					[K in keyof Z]: Z[K] extends `$${infer KK}` ? Get<T, KK> : never;
 																				}[]
 																			: never
-																	: /* $sum */
-																	TFields[K] extends { $sum: `$${infer Z}` }
-																		? NonNullable<Get<T, Z>>
-																		: /* $bottom */
-																		TFields[K] extends {
-																			$bottom: `$${infer Z}`;
-																		}
-																			? NonNullable<Get<T, Z>>
+																/* $sum */
+																	: TFields[K] extends { $sum: `$${infer Z}` } ? NonNullable<Get<T, Z>>
+																	/* $bottom */
+																		: TFields[K] extends { $bottom: `$${infer Z}` } ? NonNullable<Get<T, Z>>
 																			: TFields[K] extends { $count: number }
 																				? number
 																				: never;
@@ -257,8 +236,8 @@ export class Aggregate<T> {
 
 		return this as unknown as Aggregate<
 			// TODO: this probably does not need OmitDeep
-			OmitDeep<T, keyof TFields> &
-			BuildDotObject<ProjectionPipelineType<T, TFields>>
+			OmitDeep<T, keyof TFields>
+			& BuildDotObject<ProjectionPipelineType<T, TFields>>
 		>;
 	}
 

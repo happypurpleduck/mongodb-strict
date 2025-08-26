@@ -4,13 +4,13 @@ import type {
 	NonRecursiveType,
 } from "type-fest/source/internal/type.d.ts";
 
-export type BSONPrimitives =
-	| ObjectId
-	| Code
-	| Binary
-	| Decimal128
-	| Timestamp
-	| UUID;
+export type BSONPrimitives
+	= | ObjectId
+		| Code
+		| Binary
+		| Decimal128
+		| Timestamp
+		| UUID;
 
 export interface Primitives {
 	BuiltIns: BuiltIns;
