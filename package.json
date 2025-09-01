@@ -24,6 +24,7 @@
 	"scripts": {
 		"check": "tsc --noEmit",
 		"test": "vitest --typecheck",
+		"bench": "node bench.ts",
 		"lint": "eslint src --fix"
 	},
 	"peerDependencies": {
@@ -31,14 +32,13 @@
 		"type-fest": "^4.34.1",
 		"typescript": "^5.9.2"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@antfu/eslint-config": "^5.2.1",
-		"@biomejs/biome": "^2.2.2",
+		"@ark/attest": "^0.48.2",
 		"@faker-js/faker": "^10.0.0",
 		"@types/bun": "latest",
 		"eslint": "^9.34.0",
 		"vitest": "^3.2.4"
 	},
-	"trustedDependencies": ["@biomejs/biome", "esbuild", "unrs-resolver"]
+	"trustedDependencies": ["esbuild", "unrs-resolver"]
 }
