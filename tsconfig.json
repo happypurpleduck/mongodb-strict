@@ -16,10 +16,10 @@
 		"noUncheckedIndexedAccess": true,
 		"noUnusedLocals": false,
 		"noUnusedParameters": false,
-		"isolatedDeclarations": true,
 		"declaration": true,
 		"noEmit": true,
 		"forceConsistentCasingInFileNames": true,
+		"isolatedDeclarations": true,
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true
