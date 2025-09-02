@@ -45,16 +45,19 @@ expectTypeOf<ProjectionType<TItem, { _id: "$_id" }>>().toEqualTypeOf<
 	Pick<TItem, "_id">
 >();
 
-expectTypeOf<ProjectionType<TItem, {
-	_id: false;
-	id: "$_id";
-	abc: "$name.en";
-}>>().toEqualTypeOf<
-	{
-		id: ObjectId;
-		abc: string;
-	}
->();
+expectTypeOf<
+	ProjectionType<
+		TItem,
+		{
+			_id: false;
+			id: "$_id";
+			abc: "$name.en";
+		}
+	>
+>().toEqualTypeOf<{
+	id: ObjectId;
+	abc: string;
+}>();
 
 expectTypeOf<ProjectionType<TItem, { _id: 0; name: 0 }>>().toEqualTypeOf<
 	Omit<TItem, "_id" | "name">
@@ -124,10 +127,15 @@ expectTypeOf<
 	}>
 >();
 
-expectTypeOf<ProjectionType<TItem, {
-	_id: 0;
-	tuple: ["$name", "$_id"];
-}>>().toEqualTypeOf<
+expectTypeOf<
+	ProjectionType<
+		TItem,
+		{
+			_id: 0;
+			tuple: ["$name", "$_id"];
+		}
+	>
+>().toEqualTypeOf<
 	Simplify<{
 		tuple: [{ en: string; ar: string }, ObjectId];
 	}>

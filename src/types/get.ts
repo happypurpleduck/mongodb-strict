@@ -50,10 +50,9 @@ type UncheckedIndex<T, K extends string | number> = [T] extends [
 	: never;
 
 // Optimized PropertyOf with flattened conditionals
-type PropertyOf<
-	BaseType,
-	Key extends string,
-> = BaseType extends null | undefined
+type PropertyOf<BaseType, Key extends string> = BaseType extends
+	| null
+	| undefined
 	? undefined
 	: Key extends keyof BaseType
 		? BaseType[Key]
@@ -71,7 +70,6 @@ type PropertyOf<
 					? WithStringKeys<BaseType>[Key]
 					: never;
 
-export type Get<
-	BaseType,
-	Path extends PropertyKey,
-> = Path extends string ? GetWithPath<BaseType, ToPath<Path>> : never;
+export type Get<BaseType, Path extends PropertyKey> = Path extends string
+	? GetWithPath<BaseType, ToPath<Path>>
+	: never;

@@ -38,41 +38,38 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 				: ConditionalKeys<TP, 0 | false> extends "_id"
 					? PickDeep<
 						T,
-						| (ConditionalKeys<TP, 1 | true> & string)
-						| ("_id" extends keyof TP
-							? TP extends { _id: infer V }
-								? V extends 0 | false | string
-									? never
+							| (ConditionalKeys<TP, 1 | true> & string)
+							| ("_id" extends keyof TP
+								? TP extends { _id: infer V }
+									? V extends 0 | false | string
+										? never
+										: "_id"
 									: "_id"
-								: "_id"
-							: "_id")
+								: "_id")
 					>
 					: unknown)
 				& BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
-export type ProjectionPipelineType<T, TP>
-	= ProjectionPipelinePath<T, TP>
-		& ProjectionPipelinePipes<T, TP>;
+export type ProjectionPipelineType<T, TP> = ProjectionPipelinePath<T, TP>
+	& ProjectionPipelinePipes<T, TP>;
 
-export type ProjectionPipelinePath<T, TP>
-	= {
-		[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
-			? Get<T, KK>
-			: never;
-	}
-	& {
-		[K in ConditionalKeys<TP, Record<string, any>>]:
-		TP[K] extends readonly (keyof any)[]
-			? MapTupleToTypes<T, TP[K]>
-			: ProjectionPipelineType<
-				T,
-				TP[K]
-			>;
-	};
+export type ProjectionPipelinePath<T, TP> = {
+	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
+		? Get<T, KK>
+		: never;
+} & {
+	[K in ConditionalKeys<
+		TP,
+		Record<string, any>
+	>]: TP[K] extends readonly (keyof any)[]
+		? MapTupleToTypes<T, TP[K]>
+		: ProjectionPipelineType<T, TP[K]>;
+};
 
 export type ProjectionPipelinePipes<T, TP> = {
-	[K in ConditionalKeys<TP, Record<string, any>> & (keyof TP & `$${string}`) ]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
+	[K in ConditionalKeys<TP, Record<string, any>>
+	& (keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
 };
 
 export type ProjectionPipelineTypePipesInternal<T, TT> //
