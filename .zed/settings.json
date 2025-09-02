@@ -2,10 +2,6 @@
 	"prettier": {
 		"allowed": false
 	},
-	"code_actions_on_format": {
-		"source.fixAll.eslint": true,
-		"source.organizeImports": false
-	},
 	"languages": {
 		"JavaScript": {
 			"formatter": [
@@ -86,30 +82,6 @@
 	"lsp": {
 		"eslint": {
 			"settings": {
-				"validate": [
-					"javascript",
-					"javascriptreact",
-					"typescript",
-					"typescriptreact",
-					"vue",
-					"html",
-					"markdown",
-					"json",
-					"json5",
-					"jsonc",
-					"yaml",
-					"toml",
-					"xml",
-					"gql",
-					"graphql",
-					"astro",
-					"svelte",
-					"css",
-					"less",
-					"scss",
-					"pcss",
-					"postcss"
-				],
 				"rulesCustomizations": [
 					{
 						"rule": "style/*",
