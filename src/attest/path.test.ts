@@ -4,19 +4,24 @@ import { describe, it } from "vitest";
 
 describe("paths type", () => {
 	it("generates paths for simple object", () => {
-		attest({} as Paths<{ a: number; b: string }>).type.toString.snap(
-			"\"a\" | \"b\"",
-		);
+		attest({} as Paths<{ a: number; b: string }>)
+			.type
+			.toString
+			.snap("\"a\" | \"b\"");
 	});
 
 	it("generates paths for nested object", () => {
-		attest({} as Paths<{ a: { b: { c: boolean } } }>).type.toString.snap(
-			"\"a.b\" | \"a\" | \"a.b.c\"",
-		);
+		attest({} as Paths<{ a: { b: { c: boolean } } }>)
+			.type
+			.toString
+			.snap("\"a.b\" | \"a\" | \"a.b.c\"");
 	});
 
 	it("generates paths for array", () => {
-		attest({} as Paths<string[]>).type.toString.snap(`  | string
+		attest({} as Paths<string[]>)
+			.type
+			.toString
+			.snap(`  | string
   | number
   | (() => string)
   | ((pos: number) => string)
@@ -193,6 +198,9 @@ describe("paths type", () => {
 	});
 
 	it("handles primitive types", () => {
-		attest({} as Paths<string>).type.toString.snap("never");
+		attest({} as Paths<string>)
+			.type
+			.toString
+			.snap("never");
 	});
 });
