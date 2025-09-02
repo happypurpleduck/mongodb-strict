@@ -5,54 +5,56 @@ import type { PathsOfLiteral } from "./path-of-literal.ts";
 import type { PathsOfNonExclusiveType } from "./path-of-type.ts";
 import type { Paths } from "./path.ts";
 
-// Lazy evaluation: Cache expensive path computations
-type CachedPaths<T> = Paths<T>;
-type CachedLiteralPaths<T> = PathsOfLiteral<T>;
-type CachedNullPaths<T> = PathsOfNonExclusiveType<T, null>;
-type CachedGenericPaths<T> = Exclude<CachedPaths<T>, CachedLiteralPaths<T>>;
+// # Filter
+
+type NullPaths<T> = PathsOfNonExclusiveType<T, null>;
+type GenericPaths<T> = Exclude<Paths<T>, PathsOfLiteral<T>>;
+type ConditionOf<T, K extends PropertyKey> = Condition<Get<T, K>>;
 
 export type BasicFilter<T> = {
-	[K in CachedPaths<T>]?: Condition<Get<T, K>>;
+	[K in Paths<T>]?: ConditionOf<T, K>;
 } & {
 	$or?: Array<BasicFilter<T>>;
 	$and?: Array<BasicFilter<T>>;
 	$nor?: Array<BasicFilter<T>>;
 };
 
+// ## Generic Filter
+
 export type GenericsFilter<T> = {
-	[K in CachedGenericPaths<T>]?: Condition<Get<T, K>>;
-}
-& {
+	[K in GenericPaths<T>]?: ConditionOf<T, K>;
+} & {
 	$or?: Array<GenericsFilter<T>>;
 	$and?: Array<GenericsFilter<T>>;
 	$nor?: Array<GenericsFilter<T>>;
-}
-;
-
-export type LiteralsFilter<T> = {
-	[K in CachedLiteralPaths<T>]?: LiteralFilter<Get<T, K>>;
-} & {
-	[K in CachedNullPaths<T>]?:
-		| null
-		| { $eq?: null }
-		| { $ne?: null };
 };
 
-export type Filter<T>
-	= GenericsFilter<T>
-		& LiteralsFilter<T>
-;
+// ## Literal Filter
+
+type LiteralFilterOf<T, K extends PropertyKey> = LiteralFilter<Get<T, K>>;
+
+export type LiteralsFilter<T> = {
+	[K in PathsOfLiteral<T>]?: LiteralFilterOf<T, K>;
+} & {
+	[K in NullPaths<T>]?: null | { $eq?: null } | { $ne?: null };
+};
+
+export type Filter<T> = GenericsFilter<T> & LiteralsFilter<T>;
 
 export type LiteralFilter<T>
 	= | T
-		| { $eq?: T }
-		| { $ne?: T }
-		| { $in?: ReadonlyArray<T> }
-		| { $nin?: ReadonlyArray<T> }
-		| { $not?: Exclude<LiteralFilter<T>, T> };
+		| { $eq: T }
+		| { $ne: T }
+		| { $in: ReadonlyArray<T> }
+		| { $nin: ReadonlyArray<T> }
+		| { $not: Exclude<LiteralFilter<T>, T> };
+
+type IsLiteralOf<T, K extends PropertyKey> = IsLiteral<Get<T, K>>;
+
+// # FilterType
 
 export type LiteralsFilterType<T, Filter> = {
-	[K in keyof Filter]: IsLiteral<Get<T, K>> extends true
+	[K in keyof Filter]: IsLiteralOf<T, K> extends true
 		? Record<K, LiteralFilterType<Get<T, K>, Filter[K]>>
 		: never;
 }[keyof Filter];
