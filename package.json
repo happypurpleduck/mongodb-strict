@@ -20,7 +20,10 @@
 		}
 	},
 	"module": "src/index.ts",
-	"files": ["./src/*.ts", "./src/types/*.ts"],
+	"files": [
+		"./src/*.ts",
+		"./src/types/*.ts"
+	],
 	"scripts": {
 		"check": "tsc --noEmit",
 		"test": "vitest --typecheck",
@@ -28,7 +31,7 @@
 		"lint": "eslint src --fix"
 	},
 	"peerDependencies": {
-		"mongodb": "^6.13.0",
+		"mongodb": "^6.19.0",
 		"type-fest": "^4.34.1",
 		"typescript": "^5.9.2"
 	},
@@ -38,7 +41,14 @@
 		"@faker-js/faker": "^10.0.0",
 		"@types/bun": "latest",
 		"eslint": "^9.34.0",
+		"eslint-plugin-format": "^1.0.1",
 		"vitest": "^3.2.4"
 	},
-	"trustedDependencies": ["esbuild", "unrs-resolver"]
+	"trustedDependencies": [
+		"esbuild",
+		"unrs-resolver"
+	],
+	"volta": {
+		"node": "24.7.0"
+	}
 }
