@@ -17,7 +17,8 @@ import type {
 } from "mongodb";
 import type { IfNever } from "type-fest";
 import type { TDocument } from "./document.ts";
-import type { Filter, LiteralsFilterType } from "./types/filter.ts";
+import type { LiteralsFilterType } from "./types/filter-type.ts";
+import type { Filter } from "./types/filter.ts";
 import type { Projection, ProjectionType } from "./types/project.ts";
 import type { UpdateFilter } from "./types/update-filter.ts";
 
@@ -49,7 +50,8 @@ export class TypedCollection<T extends TDocument> {
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
 		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
-		const TProjection extends Projection<TFiltered> = Projection<TFiltered> | undefined,
+		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
+			| undefined,
 	>(
 		filter: TFilter,
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
@@ -64,11 +66,12 @@ export class TypedCollection<T extends TDocument> {
 			.toArray();
 	}
 
-	findOne<
+	async findOne<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
 		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
-		const TProjection extends Projection<TFiltered> = Projection<TFiltered> | undefined,
+		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
+			| undefined,
 	>(
 		filter: TFilter,
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
@@ -85,7 +88,8 @@ export class TypedCollection<T extends TDocument> {
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
 		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
-		const TProjection extends Projection<TFiltered> = Projection<TFiltered> | undefined,
+		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
+			| undefined,
 		const TResultMeta extends boolean = false,
 	>(
 		filter: Filter<T>,
@@ -111,7 +115,8 @@ export class TypedCollection<T extends TDocument> {
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
 		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
-		const TProjection extends Projection<TFiltered> = Projection<TFiltered> | undefined,
+		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
+			| undefined,
 		const TResultMeta extends boolean = false,
 	>(
 		filter: Filter<T>,
@@ -138,7 +143,8 @@ export class TypedCollection<T extends TDocument> {
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
 		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
-		const TProjection extends Projection<TFiltered> = Projection<TFiltered> | undefined,
+		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
+			| undefined,
 		const TResultMeta extends boolean = false,
 	>(
 		filter: Filter<T>,
@@ -158,7 +164,10 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	insertOne(doc: T, options?: InsertOneOptions): Promise<InsertOneResult<T>> {
+	async insertOne(
+		doc: T,
+		options?: InsertOneOptions,
+	): Promise<InsertOneResult<T>> {
 		return this.collection.insertOne(
 			// @ts-ignore trust me
 			doc,
@@ -166,7 +175,7 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	insertMany(
+	async insertMany(
 		docs: T[],
 		options?: BulkWriteOptions,
 	): Promise<InsertManyResult<T>> {
@@ -177,7 +186,7 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	updateOne(
+	async updateOne(
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
@@ -190,7 +199,7 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	updateMany(
+	async updateMany(
 		filter: Filter<T>,
 		update: UpdateFilter<T>,
 		options?: UpdateOptions,
@@ -203,7 +212,10 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	deleteOne(filter: Filter<T>, options?: DeleteOptions): Promise<DeleteResult> {
+	async deleteOne(
+		filter: Filter<T>,
+		options?: DeleteOptions,
+	): Promise<DeleteResult> {
 		return this.collection.deleteOne(
 			// @ts-expect-error
 			filter,
@@ -211,7 +223,7 @@ export class TypedCollection<T extends TDocument> {
 		);
 	}
 
-	deleteMany(
+	async deleteMany(
 		filter: Filter<T>,
 		options?: DeleteOptions,
 	): Promise<DeleteResult> {

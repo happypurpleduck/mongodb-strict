@@ -1,11 +1,9 @@
+/** eslint-disable style/operator-linebreak */
+
 import type { AggregateOptions, Collection, NumericType } from "mongodb";
 import type { Except } from "type-fest";
 import type { BuildDotObject } from "./types/build-dot-object.ts";
-import type {
-	Filter,
-	LiteralsFilter,
-	LiteralsFilterType,
-} from "./types/filter.ts";
+import type { Filter } from "./types/filter.ts";
 import type { Get } from "./types/get.ts";
 import type { OmitDeep } from "./types/omit-deep.ts";
 import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
@@ -47,20 +45,18 @@ export class Aggregate<T> {
 		return this;
 	}
 
-	unionMatch<const TFilter extends LiteralsFilter<T>>(match: TFilter) {
-		this.pipeline.push({
-			$match: match,
-		});
+	// unionMatch<const TFilter extends LiteralsFilter<T>>(match: TFilter) {
+	// 	this.pipeline.push({
+	// 		$match: match,
+	// 	});
 
-		return this as unknown as Aggregate<T & LiteralsFilterType<T, TFilter>>;
-	}
+	// 	return this as unknown as Aggregate<T & LiteralsFilterType<T, TFilter>>;
+	// }
 
 	// TODO:
-	sort(
-		sort: {
-			[K in Paths<T>]?: -1 | 1;
-		},
-	): this {
+	sort(sort: {
+		[K in Paths<T>]?: -1 | 1;
+	}): this {
 		this.pipeline.push({ $sort: sort });
 
 		return this;
@@ -87,7 +83,7 @@ export class Aggregate<T> {
 		(TField extends keyof T ? Except<T, TField> : T) & {
 			[K in TField]: TResult[];
 		}
-		> {
+	> {
 		this.pipeline.push({
 			$lookup: {
 				from: lookup.from.collectionName,
@@ -174,43 +170,64 @@ export class Aggregate<T> {
 					$accumulator: any;
 				}
 					? unknown
-					/* add to set */
-					: TFields[K] extends { $addToSet: `$${infer K2}` } ? Get<T, K2>[]
-					/* $avg */
-						: TFields[K] extends { $avg: `$${infer Z}` } ? NonNullable<Get<T, Z>>
-						/* bottom */
-							: TFields[K] extends { $bottom: any } ? unknown
-							/* bottomN */
-								: TFields[K] extends { $bottomN: any } ? unknown
-								/* count */
-									: TFields[K] extends { $count: any } ? number
-									/* first */
-										: TFields[K] extends { $first: `$${infer K2}` }
-											? K2 extends "$ROOT" ? T : Get<T, K2>
-										/* firstN */
-											: TFields[K] extends { $first: any } ? unknown
-											/* last */
-												: TFields[K] extends { $last: `$${infer K2}` }
-													? K2 extends "$ROOT" ? T : Get<T, K2>
-												/* lastN */
-													: TFields[K] extends { $lastN: any } ? unknown
-													/* max */
-														: TFields[K] extends { $max: `$${infer K2}` } ? Get<T, K2>
-														/* maxN */
-															: TFields[K] extends { $lastN: any } ? unknown
-															/* push */
-																: TFields[K] extends { $push: infer Z }
+					: /* add to set */
+					TFields[K] extends { $addToSet: `$${infer K2}` }
+						? Get<T, K2>[]
+						: /* $avg */
+						TFields[K] extends { $avg: `$${infer Z}` }
+							? NonNullable<Get<T, Z>>
+							: /* bottom */
+							TFields[K] extends { $bottom: any }
+								? unknown
+								: /* bottomN */
+								TFields[K] extends { $bottomN: any }
+									? unknown
+									: /* count */
+									TFields[K] extends { $count: any }
+										? number
+										: /* first */
+										TFields[K] extends { $first: `$${infer K2}` }
+											? K2 extends "$ROOT"
+												? T
+												: Get<T, K2>
+											: /* firstN */
+											TFields[K] extends { $first: any }
+												? unknown
+												: /* last */
+												TFields[K] extends { $last: `$${infer K2}` }
+													? K2 extends "$ROOT"
+														? T
+														: Get<T, K2>
+													: /* lastN */
+													TFields[K] extends { $lastN: any }
+														? unknown
+														: /* max */
+														TFields[K] extends { $max: `$${infer K2}` }
+															? Get<T, K2>
+															: /* maxN */
+															TFields[K] extends { $lastN: any }
+																? unknown
+																: /* push */
+																TFields[K] extends { $push: infer Z }
 																	? Z extends `$${infer K2}`
-																		? K2 extends "$ROOT" ? T[] : Get<T, K2>[]
+																		? K2 extends "$ROOT"
+																			? T[]
+																			: Get<T, K2>[]
 																		: Z extends Record<string, any>
 																			? {
-																					[K in keyof Z]: Z[K] extends `$${infer KK}` ? Get<T, KK> : never;
+																					[K in keyof Z]: Z[K] extends `$${infer KK}`
+																						? Get<T, KK>
+																						: never;
 																				}[]
 																			: never
-																/* $sum */
-																	: TFields[K] extends { $sum: `$${infer Z}` } ? NonNullable<Get<T, Z>>
-																	/* $bottom */
-																		: TFields[K] extends { $bottom: `$${infer Z}` } ? NonNullable<Get<T, Z>>
+																	: /* $sum */
+																	TFields[K] extends { $sum: `$${infer Z}` }
+																		? NonNullable<Get<T, Z>>
+																		: /* $bottom */
+																		TFields[K] extends {
+																			$bottom: `$${infer Z}`;
+																		}
+																			? NonNullable<Get<T, Z>>
 																			: TFields[K] extends { $count: number }
 																				? number
 																				: never;
@@ -253,12 +270,12 @@ export class Aggregate<T> {
 		return this as unknown as Aggregate<Get<T, TField>>;
 	}
 
-	next(): Promise<T | null> {
+	async next(): Promise<T | null> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).next();
 	}
 
-	toArray(): Promise<T[]> {
+	async toArray(): Promise<T[]> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).toArray();
 	}
