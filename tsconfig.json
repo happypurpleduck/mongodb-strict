@@ -24,6 +24,6 @@
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true
 	},
-	"include": ["src"],
+	"include": ["src", "extra/aggregate.ts", "extra/aggregate.ts", "extra/collection.ts", "extra/collection.ts", "extra/document.ts"],
 	"exclude": ["playground"]
 }

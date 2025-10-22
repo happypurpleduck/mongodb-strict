@@ -6,32 +6,26 @@
 		"JavaScript": {
 			"formatter": [
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
-			]
+			],
+			"language_servers": ["...", "!biome"]
 		},
 		"TypeScript": {
 			"formatter": [
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
-			]
+			],
+			"language_servers": ["...", "!biome"]
 		},
 		"TSX": {
 			"formatter": [
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
-			]
+			],
+			"language_servers": ["...", "!biome"]
 		},
 		"JSON": {
 			"formatter": [
@@ -41,13 +35,10 @@
 					}
 				},
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
 			],
-			"language_servers": ["eslint"]
+			"language_servers": ["...", "eslint", "!biome"]
 		},
 		"JSONC": {
 			"formatter": [
@@ -57,26 +48,20 @@
 					}
 				},
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
 			],
-			"language_servers": ["eslint"]
+			"language_servers": ["...", "eslint", "!biome"]
 		},
 		"Vue.js": {
 			"formatter": [
 				{
-					"code_actions": {
-						"source.fixAll.eslint": true,
-						"source.organizeImports": false
-					}
+					"code_action": "source.fixAll.eslint"
 				}
 			]
 		},
 		"YAML": {
-			"language_servers": ["eslint"]
+			"language_servers": ["...", "eslint", "!biome"]
 		}
 	},
 	"lsp": {

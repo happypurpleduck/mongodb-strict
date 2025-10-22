@@ -1,18 +1,8 @@
-import type {
-	ArraySplice,
-	IsEqual,
-	IsNever,
-	SimplifyDeep,
-	UnionToTuple,
-	UnknownArray,
-} from "type-fest";
-import type {
-	IsArrayReadonly,
-	SetArrayAccess,
-} from "type-fest/source/internal/array.d.ts";
+import type { ArraySplice, IsEqual, IsNever, SimplifyDeep, UnionToTuple, UnknownArray } from "type-fest";
+import type { IsArrayReadonly, SetArrayAccess } from "type-fest/source/internal/array.d.ts";
 import type { ExactKey } from "type-fest/source/internal/keys.d.ts";
 import type { ToString } from "type-fest/source/internal/string.d.ts";
-import type { ExtendedPrimitive } from "./primitives.ts";
+import type { ExtendedPrimitive } from "../index.ts";
 
 export type OmitDeep<T, PathUnion> = SimplifyDeep<
 	OmitDeepHelper<T, UnionToTuple<PathUnion>>,

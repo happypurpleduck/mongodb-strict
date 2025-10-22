@@ -31,13 +31,12 @@ export type ProjectionPipeline<T>
 		| ProjectionPipeline<T>[];
 
 export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
-	? SimplifyDeep<T>
-	: SimplifyDeep<
-			(keyof TP extends ConditionalKeys<TP, 0 | false>
-				? OmitDeep<T, ConditionalKeys<TP, 0 | false>>
-				: ConditionalKeys<TP, 0 | false> extends "_id"
-					? PickDeep<
-						T,
+	? T
+	: SimplifyDeep<(keyof TP extends ConditionalKeys<TP, 0 | false>
+		? OmitDeep<T, ConditionalKeys<TP, 0 | false>>
+		: ConditionalKeys<TP, 0 | false> extends "_id"
+			? PickDeep<
+				T,
 							| (ConditionalKeys<TP, 1 | true> & string)
 							| ("_id" extends keyof TP
 								? TP extends { _id: infer V }
@@ -46,9 +45,9 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 										: "_id"
 									: "_id"
 								: "_id")
-					>
-					: unknown)
-				& BuildDotObject<ProjectionPipelineType<T, TP>>
+			>
+			: unknown)
+		& BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
 export type ProjectionPipelineType<T, TP> = ProjectionPipelinePath<T, TP>
@@ -72,7 +71,7 @@ export type ProjectionPipelinePipes<T, TP> = {
 	& (keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
 };
 
-export type ProjectionPipelineTypePipesInternal<T, TT> //
+export type ProjectionPipelineTypePipesInternal<T, TT>
 	= TT extends {
 		$arrayElemAt: [`$${infer KK}`, infer Index extends number];
 	} // TODO: support tuple and tuple with negative index

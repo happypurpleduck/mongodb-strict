@@ -16,11 +16,11 @@ import type {
 	WithoutId,
 } from "mongodb";
 import type { IfNever } from "type-fest";
-import type { TDocument } from "./document.ts";
-import type { LiteralsFilterType } from "./types/filter-type.ts";
-import type { Filter } from "./types/filter.ts";
-import type { Projection, ProjectionType } from "./types/project.ts";
-import type { UpdateFilter } from "./types/update-filter.ts";
+import type { TDocument } from "../src/document.ts";
+import type { LiteralsFilterType } from "../src/types/filter-type.ts";
+import type { Filter } from "../src/types/filter.ts";
+import type { Projection, ProjectionType } from "../src/types/project.ts";
+import type { UpdateFilter } from "../src/types/update-filter.ts";
 
 export class TypedCollection<T extends TDocument> {
 	collection: Collection<T>;

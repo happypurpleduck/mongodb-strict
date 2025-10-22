@@ -2,19 +2,19 @@
 
 import type { AggregateOptions, Collection, NumericType } from "mongodb";
 import type { Except } from "type-fest";
-import type { BuildDotObject } from "./types/build-dot-object.ts";
-import type { Filter } from "./types/filter.ts";
-import type { Get } from "./types/get.ts";
-import type { OmitDeep } from "./types/omit-deep.ts";
-import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
-import type { Paths } from "./types/path.ts";
+import type { BuildDotObject } from "../src/types/build-dot-object.ts";
+import type { Filter } from "../src/types/filter.ts";
+import type { Get } from "../src/types/get.ts";
+import type { OmitDeep } from "../src/types/omit-deep.ts";
+import type { PathOfType, PathsOfType } from "../src/types/path-of-type.ts";
+import type { Paths } from "../src/types/path.ts";
 import type {
 	Projection,
 	ProjectionPipeline,
 	ProjectionPipelineType,
 	ProjectionType,
-} from "./types/project.ts";
-import type { Singular } from "./types/singular.ts";
+} from "../src/types/project.ts";
+import type { Singular } from "../src/types/singular.ts";
 
 export type InferAggregateType<T extends Aggregate<any>> = T["~type"];
 

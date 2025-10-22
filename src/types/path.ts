@@ -1,9 +1,6 @@
 import type { EmptyObject, IsAny, UnknownArray } from "type-fest";
-import type {
-	StaticPartOfArray,
-	VariablePartOfArray,
-} from "type-fest/source/internal/array.js";
-import type { ExtendedPrimitive } from "./primitives.js";
+import type { StaticPartOfArray, VariablePartOfArray } from "type-fest/source/internal/array.js";
+import type { ExtendedPrimitive } from "../index.js";
 
 export type Paths<T> = _Paths<T>;
 

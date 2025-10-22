@@ -1,10 +1,8 @@
 import type { IsNever, UnionToIntersection, UnknownArray } from "type-fest";
-import type {
-	BuildObject,
-	ObjectValue,
+import type { BuildObject, ObjectValue,
 } from "type-fest/source/internal/object.d.ts";
 import type { BuildTuple } from "type-fest/source/internal/tuple.d.ts";
-import type { ExtendedPrimitive } from "./primitives.ts";
+import type { ExtendedPrimitive } from "../index.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
 // Optimized version that computes UnionToIntersection once

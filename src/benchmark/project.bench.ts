@@ -1,18 +1,23 @@
+import type { TOrder } from "../test/order.ts";
 import type { Projection, ProjectionType } from "../types/project.ts";
 import { bench } from "@ark/attest";
 
 bench("Projection with simple object", () => {
-	return {} as Projection<{ a: number; b: string }>;
-}).types([2974, "instantiations"]);
+	return {} as Projection<TOrder>;
+}).types([806, "instantiations"]);
 
 bench("ProjectionType with inclusion", () => {
-	return {} as ProjectionType<{ a: number; b: string }, { a: 1 }>;
-}).types([5165, "instantiations"]);
+	return {} as ProjectionType<TOrder, { a: 1 }>;
+}).types([2883, "instantiations"]);
 
 bench("ProjectionType with exclusion", () => {
-	return {} as ProjectionType<{ a: number; b: string }, { b: 0 }>;
-}).types([5090, "instantiations"]);
+	return {} as ProjectionType<TOrder, { b: 0 }>;
+}).types([2805, "instantiations"]);
+
+bench("ProjectionType with exclusion", () => {
+	return {} as ProjectionType<TOrder, { b: 0 }>;
+}).types([2805, "instantiations"]);
 
 bench("ProjectionType with undefined", () => {
-	return {} as ProjectionType<{ a: number; b: string }, undefined>;
-}).types([2991, "instantiations"]);
+	return {} as ProjectionType<TOrder, undefined>;
+}).types([822, "instantiations"]);

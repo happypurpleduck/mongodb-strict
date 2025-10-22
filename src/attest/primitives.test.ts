@@ -1,7 +1,4 @@
-import type {
-	BSONPrimitives,
-	ExtendedPrimitive,
-} from "../types/primitives.d.ts";
+import type { BSONPrimitives, ExtendedPrimitive } from "../index.ts";
 import { attest } from "@ark/attest";
 import { describe, it } from "vitest";
 

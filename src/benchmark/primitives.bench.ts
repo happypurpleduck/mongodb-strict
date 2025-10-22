@@ -1,4 +1,4 @@
-import type { BSONPrimitives, ExtendedPrimitive } from "../types/primitives.d.ts";
+import type { BSONPrimitives, ExtendedPrimitive } from "../index.ts";
 import { bench } from "@ark/attest";
 
 bench("BSONPrimitives type", () => {
