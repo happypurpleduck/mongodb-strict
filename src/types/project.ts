@@ -1,3 +1,4 @@
+import type { Decimal128, ObjectId, UUID } from "mongodb";
 import type { ConditionalKeys, IsTuple } from "type-fest";
 import type { BuildDotObject } from "./build-dot-object.ts";
 import type { Get } from "./get.ts";
@@ -26,6 +27,15 @@ export type Projection<T>
 export type ProjectionPipeline<T>
 	= | `$${Paths<T>}`
 		| { $literal: any }
+		| { $toBool: `$${Paths<T>}` }
+		| { $toDate: `$${Paths<T>}` }
+		| { $toDecimal: `$${Paths<T>}` }
+		| { $toDouble: `$${Paths<T>}` }
+		| { $toInt: `$${Paths<T>}` }
+		| { $toLong: `$${Paths<T>}` }
+		| { $toObjectId: `$${Paths<T>}` }
+		| { $toString: `$${Paths<T>}` }
+		| { $toUUID: `$${Paths<T>}` }
 		| { $arrayElemAt: [`$${PathsOfType<T, any[]>}`, number] }
 		| { [K in string]: ProjectionPipeline<T> }
 		| ProjectionPipeline<T>[];
@@ -81,4 +91,22 @@ export type ProjectionPipelineTypePipesInternal<T, TT>
 			: never
 		: TT extends { $literal: infer V }
 			? V
-			: never;
+			: TT extends { $toBool: string }
+				? boolean
+				: TT extends { $toDate: string }
+					? Date
+					: TT extends { $toDecimal: string }
+						? Decimal128
+						: TT extends { $toDouble: string }
+							? number
+							: TT extends { $toInt: string }
+								? number
+								: TT extends { $toLong: string }
+									? number
+									: TT extends { $toObjectId: string }
+										? ObjectId
+										: TT extends { $toString: string }
+											? string
+											: TT extends { $toUUID: string }
+												? UUID
+												: never;

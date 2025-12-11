@@ -16,6 +16,8 @@ export type BasicFilter<T> = {
 	$or?: Array<BasicFilter<T>>;
 	$and?: Array<BasicFilter<T>>;
 	$nor?: Array<BasicFilter<T>>;
+	/** TODO: not implemented (type) */
+	$expr?: any;
 };
 
 // ## Generic Filter
@@ -26,6 +28,8 @@ export type GenericsFilter<T> = {
 	$or?: Array<GenericsFilter<T>>;
 	$and?: Array<GenericsFilter<T>>;
 	$nor?: Array<GenericsFilter<T>>;
+	/** TODO: not implemented (type) */
+	$expr?: any;
 };
 
 // ## Literal Filter
