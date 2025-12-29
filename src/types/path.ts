@@ -27,10 +27,8 @@ type InternalPaths<BaseT>
 					[Key in keyof T]: Key extends StringOrNumber
 						? | Key
 						| (Key extends number ? `${Key}` : never)
-						| (_Paths<T[Key]> extends infer SubPath
-							? SubPath extends StringOrNumber
-								? `${Key}.${SubPath}`
-								: never
+						| (_Paths<T[Key]> extends infer SubPath extends StringOrNumber
+							? `${Key}.${SubPath}`
 							: never)
 						: never;
 				}[keyof T & (T extends UnknownArray ? number : unknown)]
