@@ -78,7 +78,18 @@ expectTypeOf<ProjectionType<TItem, { "_id": 0; "name.en": 0 }>>().toEqualTypeOf<
 	price: Decimal128 | undefined;
 	tag: [string, number];
 	x: 5 | 10;
-	y: 10;
+	y: 10
+	location: 
+		| {
+			type: "direct";
+			latitude: number;
+			longitude: number;
+		}
+		| {
+			type: "indirect";
+			latitude: number;
+			longitude: number;
+		};
 	options: Array<{
 		name: {
 			en: string;

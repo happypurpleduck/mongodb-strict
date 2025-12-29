@@ -60,53 +60,47 @@ export type ProjectionType<T, TP extends Projection<T>> = TP extends undefined
 		& BuildDotObject<ProjectionPipelineType<T, TP>>
 	>;
 
-export type ProjectionPipelineType<T, TP> = ProjectionPipelinePath<T, TP>
-	& ProjectionPipelinePipes<T, TP>;
-
-export type ProjectionPipelinePath<T, TP> = {
-	[K in ConditionalKeys<TP, string>]: TP[K] extends `$${infer KK}`
-		? Get<T, KK>
-		: never;
-} & {
-	[K in ConditionalKeys<
-		TP,
-		Record<string, any>
-	>]: TP[K] extends readonly (keyof any)[]
-		? MapTupleToTypes<T, TP[K]>
-		: ProjectionPipelineType<T, TP[K]>;
+// Unified pipeline type - single pass over all non-boolean keys
+export type ProjectionPipelineType<T, TP> = {
+	[K in ConditionalKeys<TP, string | Record<string, any>>]: K extends `$${string}`
+		? ProjectionPipelineTypePipesInternal<T, TP[K]>
+		: TP[K] extends `$${infer KK}`
+			? Get<T, KK>
+			: TP[K] extends readonly (keyof any)[]
+				? MapTupleToTypes<T, TP[K]>
+				: TP[K] extends Record<string, any>
+					? ProjectionPipelineType<T, TP[K]>
+					: never;
 };
 
-export type ProjectionPipelinePipes<T, TP> = {
-	[K in ConditionalKeys<TP, Record<string, any>>
-	& (keyof TP & `$${string}`)]: ProjectionPipelineTypePipesInternal<T, TP[K]>;
-};
-
+// Use infer to cache Get<T, KK> computation and reduce nesting
 export type ProjectionPipelineTypePipesInternal<T, TT>
-	= TT extends {
-		$arrayElemAt: [`$${infer KK}`, infer Index extends number];
-	} // TODO: support tuple and tuple with negative index
-		? Get<T, KK> extends any[]
-			? | Get<T, KK>[Index]
-			| (IsTuple<Get<T, KK>> extends true ? never : undefined)
+	= TT extends { $arrayElemAt: [`$${infer KK}`, infer Index extends number] }
+		? Get<T, KK> extends infer Arr extends any[]
+			? Arr[Index] | (IsTuple<Arr> extends true ? never : undefined)
 			: never
 		: TT extends { $literal: infer V }
 			? V
-			: TT extends { $toBool: string }
-				? boolean
-				: TT extends { $toDate: string }
-					? Date
-					: TT extends { $toDecimal: string }
-						? Decimal128
-						: TT extends { $toDouble: string }
-							? number
-							: TT extends { $toInt: string }
-								? number
-								: TT extends { $toLong: string }
-									? number
-									: TT extends { $toObjectId: string }
-										? ObjectId
-										: TT extends { $toString: string }
-											? string
-											: TT extends { $toUUID: string }
-												? UUID
-												: never;
+			: PipelineConversion<TT>; // Extract conversion operators to separate type
+
+// Conversion type map - indexed access is more efficient than conditional chain
+type ConversionTypeMap = {
+	$toBool: boolean;
+	$toDate: Date;
+	$toDecimal: Decimal128;
+	$toDouble: number;
+	$toInt: number;
+	$toLong: number;
+	$toObjectId: ObjectId;
+	$toString: string;
+	$toUUID: UUID;
+};
+
+type ConversionKeys = keyof ConversionTypeMap;
+
+// Use indexed access pattern for conversion lookup
+type PipelineConversion<TT> = {
+	[K in ConversionKeys]: K extends keyof TT
+		? TT[K] extends string ? ConversionTypeMap[K] : never
+		: never;
+}[ConversionKeys];

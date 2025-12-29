@@ -10,6 +10,17 @@ export interface TItem extends TDocument {
 	x: 5 | 10;
 	y: 10;
 	tag: [string, number];
+	location:
+		| {
+			type: "direct";
+			latitude: number;
+			longitude: number;
+		}
+		| {
+			type: "indirect";
+			latitude: number;
+			longitude: number;
+		};
 	options: Array<{
 		name: {
 			en: string;

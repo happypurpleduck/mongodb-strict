@@ -34,3 +34,5 @@ expectTypeOf<Get<TItem, "options.name">>().toEqualTypeOf<
 expectTypeOf<Get<TItem, "options.name.en">>().toEqualTypeOf<
 	Array<TItem["options"][number]["name"]["en"]>
 >();
+expectTypeOf<Get<TItem, "location">>().toEqualTypeOf<TItem["location"]>();
+expectTypeOf<Get<TItem, "location.latitude">>().toEqualTypeOf<TItem["location"]["latitude"]>();
