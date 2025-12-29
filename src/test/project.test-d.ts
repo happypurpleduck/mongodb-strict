@@ -18,6 +18,12 @@ expectTypeOf<
 			| "tag"
 			| "tag.0"
 			| "tag.1"
+			| "properties"
+			| `properties.${string}`
+			| "location"
+			| "location.type"
+			| "location.latitude"
+			| "location.longitude"
 			| "options"
 			| `options.${number}`
 			| "options.name"
@@ -79,6 +85,7 @@ expectTypeOf<ProjectionType<TItem, { "_id": 0; "name.en": 0 }>>().toEqualTypeOf<
 	tag: [string, number];
 	x: 5 | 10;
 	y: 10;
+	properties: Record<string, string>;
 	location:
 		| {
 			type: "direct";

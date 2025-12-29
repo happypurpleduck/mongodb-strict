@@ -21,6 +21,7 @@ export interface TItem extends TDocument {
 			latitude: number;
 			longitude: number;
 		};
+	properties: Record<string, string>;
 	options: Array<{
 		name: {
 			en: string;

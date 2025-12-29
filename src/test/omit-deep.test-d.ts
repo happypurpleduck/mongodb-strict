@@ -14,6 +14,7 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 	x: 5 | 10;
 	y: 10;
 	tag: [string, number];
+	properties: Record<string, string>;
 	location:
 		| {
 			type: "direct";
@@ -44,6 +45,7 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 	tag: [string, number];
 	x: 5 | 10;
 	y: 10;
+	properties: Record<string, string>;
 	location:
 		| {
 			type: "direct";
@@ -76,6 +78,7 @@ expectTypeOf<
 	tag: [string, number];
 	x: 5 | 10;
 	y: 10;
+	properties: Record<string, string>;
 	location:
 		| {
 			type: "direct";
