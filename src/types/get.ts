@@ -1,60 +1,50 @@
-import type { Split, UnknownArray } from "type-fest";
-import type { StringOrNumber } from "./property-key.ts";
+// TODO: extract/remove if is implemented elsewhere
+type IsNumeric<Key> = Key extends number | `${number}` ? true : false;
 
-type MaybeNumber = number | `${number}`;
+type PropertyOf<BaseType, Key>
+	= BaseType extends null | undefined
+		? undefined
+		: Key extends keyof BaseType
+			? BaseType[Key]
+			: BaseType extends readonly unknown[]
+				? IsNumeric<Key> extends true
+					? BaseType[number] | undefined
+					: Key extends keyof BaseType[number]
+						? BaseType[number]
+						: never
+				: never;
 
-type GetWithPath<
-	BaseType,
-	Keys extends readonly any[],
-> = Keys extends readonly []
-	? BaseType
-	: Keys extends readonly [
-		infer Head,
-		...infer Tail,
-	]
-		? Head extends MaybeNumber
-			? GetWithPath<
-				PropertyOf<BaseType, Head>,
-				Tail
-			>
-			: BaseType extends UnknownArray
-				? BaseType[number] extends object
-					? Array<
-						GetWithPath<
-							PropertyOf<BaseType[number], Head>,
-							Tail
-						>
-					>
-					: never
-				: GetWithPath<
-					PropertyOf<BaseType, Head>,
-					Tail
-				>
+type ArrayPropertyOf<BaseType, Key>
+	= BaseType extends readonly unknown[]
+		? Key extends keyof BaseType[number]
+			? Array<BaseType[number][Key]>
+			: never
 		: never;
 
-// eslint-disable-next-line ts/consistent-type-definitions
-type O = { strictLiteralChecks: false };
-type Delimiter = ".";
-type ToPath<S extends StringOrNumber> = S extends string ? Split<S, Delimiter, O> : [S];
-
-type PropertyOf<BaseType, Key> = BaseType extends
-	| null
-	| undefined
-	? undefined
-	: Key extends keyof BaseType
-		? BaseType[Key]
-		: BaseType extends UnknownArray
-			? Key extends MaybeNumber
-				? BaseType[number] | undefined
-				: Key extends keyof BaseType[number]
-					? BaseType[number]
-					: never
+type GetImpl<BaseType, Path extends string>
+	= Path extends `${infer Head}.${infer Tail}`
+		? IsNumeric<Head> extends true
+			? GetImpl<PropertyOf<BaseType, Head>, Tail>
 			: BaseType extends readonly unknown[]
-				? Key extends MaybeNumber
-					? BaseType[number]
+				? BaseType[number] extends object
+					? Array<GetImpl<PropertyOf<BaseType[number], Head>, Tail>>
 					: never
-				: Key extends keyof BaseType
-					? BaseType[Key]
-					: never;
+				: GetImpl<PropertyOf<BaseType, Head>, Tail>
+		: IsNumeric<Path> extends true
+			? PropertyOf<BaseType, Path>
+			: BaseType extends readonly unknown[]
+				? BaseType[number] extends object
+					? ArrayPropertyOf<BaseType, Path>
+					: PropertyOf<BaseType, Path>
+				: PropertyOf<BaseType, Path>;
 
-export type Get<BaseType, Path extends PropertyKey> = Path extends StringOrNumber ? GetWithPath<BaseType, ToPath<Path>> : never;
+export type Get<BaseType, Path extends PropertyKey>
+	= Path extends string
+		? GetImpl<BaseType, Path>
+		: Path extends number
+			? `${Path}` extends keyof BaseType
+				? BaseType[`${Path}`]
+				: BaseType extends readonly unknown[]
+					? BaseType[number] | undefined
+					: PropertyOf<BaseType, Path>
+			: never;

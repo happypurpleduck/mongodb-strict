@@ -17,11 +17,26 @@ describe("get type", () => {
 			.snap("string");
 	});
 
-	it("gets array element", () => {
-		attest({} as Get<string[], "0">)
+	it("gets array element `number`", () => {
+		attest({} as Get<string[], number>)
 			.type
 			.toString
 			.snap("string | undefined");
+	});
+
+	// eslint-disable-next-line no-template-curly-in-string
+	it("gets array element \"`${number}`\"", () => {
+		attest({} as Get<string[], `${number}`>)
+			.type
+			.toString
+			.snap("string | undefined");
+	});
+
+	it("gets tuple element with numeric literal `0`", () => {
+		attest({} as Get<[string, number], 0>)
+			.type
+			.toString
+			.snap("string");
 	});
 
 	it("handles invalid path", () => {

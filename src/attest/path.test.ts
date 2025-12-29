@@ -39,6 +39,6 @@ describe("paths type", () => {
 		attest({} as Paths<{ a: number; b: string }[]>)
 			.type
 			.toString
-			.snap("number | `${number}` | \"a\" | \"b\" | `${number}.a` | `${number}.b`");
+			.snap("  | number\n  | `${number}`\n  | \"a\"\n  | \"b\"\n  | `${number}.a`\n  | `${number}.b`");
 	});
 });
