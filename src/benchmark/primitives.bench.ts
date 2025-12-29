@@ -5,7 +5,7 @@ bench("BSONPrimitives type", () => {
 	return {} as BSONPrimitives;
 }).types([212, "instantiations"]);
 
-bench("ExtendedPrimitive type", () => {
+bench("ExtendedPrimitive type", async () => {
 	return {} as ExtendedPrimitive;
 }).types([222, "instantiations"]);
 

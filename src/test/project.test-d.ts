@@ -85,6 +85,8 @@ expectTypeOf<ProjectionType<TItem, { "_id": 0; "name.en": 0 }>>().toEqualTypeOf<
 			ar: string;
 		};
 		price: Decimal128;
+		offerPrice: Decimal128 | null;
+		values: number[];
 	}>;
 }>();
 
@@ -138,5 +140,35 @@ expectTypeOf<
 >().toEqualTypeOf<
 	Simplify<{
 		tuple: [{ en: string; ar: string }, ObjectId];
+	}>
+>();
+
+expectTypeOf<
+	ProjectionType<
+		TItem,
+		{
+			"_id": false;
+			"name": true;
+			"options.name": 1;
+			"options.price": 1;
+			"options.offerPrice": 1;
+			"options.values": 1;
+		}
+	>
+>().toEqualTypeOf<
+	Simplify<{
+		name: {
+			ar: string;
+			en: string;
+		};
+		options: Array<{
+			name: {
+				ar: string;
+				en: string;
+			};
+			price: Decimal128;
+			offerPrice: Decimal128 | null;
+			values: number[];
+		}>;
 	}>
 >();

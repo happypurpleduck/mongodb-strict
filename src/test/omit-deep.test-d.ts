@@ -20,6 +20,8 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 			ar: string;
 		};
 		price: Decimal128;
+		offerPrice: Decimal128 | null;
+		values: number[];
 	}>;
 }>();
 
@@ -37,6 +39,8 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 			ar: string;
 		};
 		price: Decimal128;
+		offerPrice: Decimal128 | null;
+		values: number[];
 	}>;
 }>();
 
@@ -55,6 +59,8 @@ expectTypeOf<
 			ar: string;
 		};
 		price: Decimal128;
+		offerPrice: Decimal128 | null;
+		values: number[];
 	}>;
 }>();
 

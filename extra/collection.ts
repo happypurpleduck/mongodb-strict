@@ -1,21 +1,5 @@
-import type {
-	BulkWriteOptions,
-	Collection,
-	DeleteOptions,
-	DeleteResult,
-	FindOneAndDeleteOptions,
-	FindOneAndReplaceOptions,
-	FindOneAndUpdateOptions,
-	FindOptions,
-	InsertManyResult,
-	InsertOneOptions,
-	InsertOneResult,
-	ModifyResult,
-	UpdateOptions,
-	UpdateResult,
-	WithoutId,
-} from "mongodb";
-import type { IfNever } from "type-fest";
+import type { BulkWriteOptions, Collection, DeleteOptions, DeleteResult, FindOneAndDeleteOptions, FindOneAndReplaceOptions, FindOneAndUpdateOptions, FindOptions, InsertManyResult, InsertOneOptions, InsertOneResult, ModifyResult, UpdateOptions, UpdateResult,	WithoutId } from "mongodb";
+import type { IsNever } from "type-fest";
 import type { TDocument } from "../src/document.ts";
 import type { LiteralsFilterType } from "../src/types/filter-type.ts";
 import type { Filter } from "../src/types/filter.ts";
@@ -49,17 +33,17 @@ export class TypedCollection<T extends TDocument> {
 	async findAll<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
-		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
+		TFiltered = IsNever<TLiteralsFilterType> extends true ? T : T & TLiteralsFilterType,
 		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
 			| undefined,
 	>(
 		filter: TFilter,
 		options?: Omit<FindOptions, "projection"> & { projection?: TProjection },
 	): Promise<ProjectionType<TFiltered, TProjection>[]> {
-		// @ts-expect-error trust me
+		// @ts-expect-error
 		return this.collection
 			.find(
-				// @ts-expect-error trust me
+				// @ts-expect-error
 				filter,
 				options,
 			)
@@ -69,7 +53,7 @@ export class TypedCollection<T extends TDocument> {
 	async findOne<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
-		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
+		TFiltered = IsNever<TLiteralsFilterType> extends true ? T : T & TLiteralsFilterType,
 		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
 			| undefined,
 	>(
@@ -87,7 +71,7 @@ export class TypedCollection<T extends TDocument> {
 	findOneAndUpdate<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
-		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
+		TFiltered = IsNever<TLiteralsFilterType> extends true ? T : T & TLiteralsFilterType,
 		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
 			| undefined,
 		const TResultMeta extends boolean = false,
@@ -114,7 +98,7 @@ export class TypedCollection<T extends TDocument> {
 	findOneAndReplace<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
-		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
+		TFiltered = IsNever<TLiteralsFilterType> extends true ? T : T & TLiteralsFilterType,
 		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
 			| undefined,
 		const TResultMeta extends boolean = false,
@@ -142,7 +126,7 @@ export class TypedCollection<T extends TDocument> {
 	findOneAndDelete<
 		const TFilter extends Filter<T>,
 		TLiteralsFilterType = LiteralsFilterType<T, TFilter>,
-		TFiltered = IfNever<TLiteralsFilterType, T, T & TLiteralsFilterType>,
+		TFiltered = IsNever<TLiteralsFilterType> extends true ? T : T & TLiteralsFilterType,
 		const TProjection extends Projection<TFiltered> = | Projection<TFiltered>
 			| undefined,
 		const TResultMeta extends boolean = false,

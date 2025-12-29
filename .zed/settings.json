@@ -9,7 +9,12 @@
 					"code_action": "source.fixAll.eslint"
 				}
 			],
-			"language_servers": ["...", "!biome"]
+			"language_servers": [
+				"...",
+				"!biome",
+				"!typescript-language-server",
+				"!vtsls"
+			]
 		},
 		"TypeScript": {
 			"formatter": [
@@ -17,7 +22,12 @@
 					"code_action": "source.fixAll.eslint"
 				}
 			],
-			"language_servers": ["...", "!biome"]
+			"language_servers": [
+				"...",
+				"!biome",
+				"!typescript-language-server",
+				"!vtsls"
+			]
 		},
 		"TSX": {
 			"formatter": [
@@ -25,7 +35,12 @@
 					"code_action": "source.fixAll.eslint"
 				}
 			],
-			"language_servers": ["...", "!biome"]
+			"language_servers": [
+				"...",
+				"!biome",
+				"!typescript-language-server",
+				"!vtsls"
+			]
 		},
 		"JSON": {
 			"formatter": [
@@ -52,13 +67,6 @@
 				}
 			],
 			"language_servers": ["...", "eslint", "!biome"]
-		},
-		"Vue.js": {
-			"formatter": [
-				{
-					"code_action": "source.fixAll.eslint"
-				}
-			]
 		},
 		"YAML": {
 			"language_servers": ["...", "eslint", "!biome"]

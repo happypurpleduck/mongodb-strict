@@ -1,4 +1,4 @@
-import type { NumericType, Timestamp } from "mongodb";
+import type { BSONNumericTypeLike, BSONTimestampLike } from "./bson.ts";
 import type { PathsOfNonExclusiveType, PathsOfType } from "./path-of-type.ts";
 import type { PickDeep } from "./pick-deep.ts";
 import type { PopOperation } from "./pop-operation.ts";
@@ -10,11 +10,11 @@ import type { StrictMatchKeysAndValues } from "./strict-match-keys-and-values.ts
 import type { UnsetOperation } from "./unset-operation.ts";
 
 export interface UpdateFilter<T> {
-	$currentDate?: PickDeep<T, PathsOfType<T, Date | Timestamp>>;
-	$inc?: Partial<PickDeep<T, PathsOfNonExclusiveType<T, NumericType>>>;
+	$currentDate?: PickDeep<T, PathsOfType<T, Date | BSONTimestampLike>>;
+	$inc?: Partial<PickDeep<T, PathsOfNonExclusiveType<T, BSONNumericTypeLike>>>;
 	$min?: StrictMatchKeysAndValues<T>;
 	$max?: StrictMatchKeysAndValues<T>;
-	$mul?: PickDeep<T, PathsOfType<T, NumericType>>;
+	$mul?: PickDeep<T, PathsOfType<T, BSONNumericTypeLike>>;
 	// $rename?: Record<string, string>;
 	$set?: StrictMatchKeysAndValues<T>;
 	$setOnInsert?: StrictMatchKeysAndValues<T>;

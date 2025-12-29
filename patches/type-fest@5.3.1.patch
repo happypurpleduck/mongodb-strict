@@ -1,0 +1,14 @@
+diff --git a/package.json b/package.json
+index d1c50d40b6a2475542240dcbc2c75d4c22b47cfa..759ba411cb2f4dd57534c1dc5ed818b9f353aed8 100644
+--- a/package.json
++++ b/package.json
+@@ -17,6 +17,9 @@
+ 		},
+ 		"./globals": {
+ 			"types": "./source/globals/index.d.ts"
++		},
++		"./source/*": {
++			"types": "./source/*"
+ 		}
+ 	},
+ 	"types": "./index.d.ts",

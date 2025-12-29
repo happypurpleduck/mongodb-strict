@@ -1,30 +1,7 @@
 {
 	"name": "@purpleduck/mongodb-strict",
-	"type": "module",
 	"version": "0.0.3",
-	"files": [
-		"dist",
-		"README.md"
-	],
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"default": "./dist/index.js"
-		}
-	},
 	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"scripts": {
-		"check": "tsc --noEmit",
-		"test": "vitest --typecheck",
-		"bench": "node bench.ts",
-		"lint": "eslint src --fix",
-		"build": "tsdown --dts"
-	},
-	"peerDependencies": {
-		"mongodb": "^6.19.0",
-		"type-fest": "^4.41.0"
-	},
 	"devDependencies": {
 		"@antfu/eslint-config": "^6.0.0",
 		"@ark/attest": "^0.51.0",
@@ -32,15 +9,42 @@
 		"@types/bun": "1.3.0",
 		"eslint": "^9.38.0",
 		"eslint-plugin-format": "^1.0.2",
+		"prettier": "^3.7.4",
 		"tsdown": "^0.15.9",
-		"vitest": "^4.0.1",
-		"typescript": "^5.9.3"
+		"type-fest": "^5.3.1",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.1"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"files": [
+		"README.md",
+		"dist"
+	],
+	"patchedDependencies": {
+		"type-fest@5.3.1": "patches/type-fest@5.3.1.patch"
+	},
+	"scripts": {
+		"check": "tsc --noEmit",
+		"test": "vitest --typecheck",
+		"bench": "node bench.ts",
+		"lint": "eslint src --fix",
+		"build": "tsdown --dts"
 	},
 	"trustedDependencies": [
 		"esbuild",
 		"unrs-resolver"
 	],
+	"type": "module",
+	"types": "./dist/index.d.ts",
 	"volta": {
 		"node": "24.7.0"
+	},
+	"dependencies": {
+		"mongodb": "^7.0.0"
 	}
 }

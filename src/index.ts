@@ -1,5 +1,4 @@
-import type { Binary, Code, Decimal128, ObjectId, Timestamp, UUID } from "bson";
-import type { BuiltIns, NonRecursiveType } from "type-fest/source/internal/type.d.ts";
+import type { BuiltIns, NonRecursiveType } from "type-fest/source/internal/index.d.ts";
 
 export type * from "./types/build-dot-object.ts";
 export type * from "./types/exactly.ts";
@@ -27,13 +26,9 @@ export type * from "./types/strict-match-keys-and-values.ts";
 export type * from "./types/unset-operation.ts";
 export type * from "./types/update-filter.ts";
 
-export type BSONPrimitives
-	= | ObjectId
-		| Code
-		| Binary
-		| Decimal128
-		| Timestamp
-		| UUID;
+export interface BSONPrimitives {
+	get _bsontype(): string;
+}
 
 export interface Primitives {
 	BuiltIns: BuiltIns;

@@ -16,5 +16,7 @@ export interface TItem extends TDocument {
 			ar: string;
 		};
 		price: Decimal128;
+		offerPrice: Decimal128 | null;
+		values: number[];
 	}>;
 }

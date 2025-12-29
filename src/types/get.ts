@@ -1,75 +1,60 @@
-import type { Split, StringKeyOf, UnknownArray } from "type-fest";
-import type { StringDigit } from "type-fest/source/internal/characters.d.ts";
+import type { Split, UnknownArray } from "type-fest";
+import type { StringOrNumber } from "./property-key.ts";
+
+type MaybeNumber = number | `${number}`;
 
 type GetWithPath<
 	BaseType,
-	Keys extends readonly string[],
+	Keys extends readonly any[],
 > = Keys extends readonly []
 	? BaseType
-	: Keys extends readonly [infer Head, ...infer Tail]
-		? Head extends `${number}`
+	: Keys extends readonly [
+		infer Head,
+		...infer Tail,
+	]
+		? Head extends MaybeNumber
 			? GetWithPath<
-				PropertyOf<BaseType, Extract<Head, string>>,
-				Extract<Tail, readonly string[]>
+				PropertyOf<BaseType, Head>,
+				Tail
 			>
 			: BaseType extends UnknownArray
 				? BaseType[number] extends object
 					? Array<
 						GetWithPath<
-							PropertyOf<BaseType[number], Extract<Head, string>>,
-							Extract<Tail, readonly string[]>
+							PropertyOf<BaseType[number], Head>,
+							Tail
 						>
 					>
 					: never
 				: GetWithPath<
-					PropertyOf<BaseType, Extract<Head, string>>,
-					Extract<Tail, readonly string[]>
+					PropertyOf<BaseType, Head>,
+					Tail
 				>
 		: never;
 
-type ToPath<S extends string> = Split<S, ".">;
+// eslint-disable-next-line ts/consistent-type-definitions
+type O = { strictLiteralChecks: false };
+type Delimiter = ".";
+type ToPath<S extends StringOrNumber> = S extends string ? Split<S, Delimiter, O> : [S];
 
-// Simplified version - avoid deep recursion for digit checking
-type ConsistsOnlyOf<
-	LongString extends string,
-	Substring extends string,
-> = LongString extends ""
-	? true
-	: LongString extends `${Substring}${infer Tail}`
-		? ConsistsOnlyOf<Tail, Substring>
-		: false;
-
-type WithStringKeys<BaseType> = {
-	[Key in StringKeyOf<BaseType>]: UncheckedIndex<BaseType, Key>;
-};
-
-type UncheckedIndex<T, K extends string | number> = [T] extends [
-	Record<string | number, any>,
-]
-	? T[K]
-	: never;
-
-// Optimized PropertyOf with flattened conditionals
-type PropertyOf<BaseType, Key extends string> = BaseType extends
+type PropertyOf<BaseType, Key> = BaseType extends
 	| null
 	| undefined
 	? undefined
 	: Key extends keyof BaseType
 		? BaseType[Key]
 		: BaseType extends UnknownArray
-			? Key extends `${number}`
+			? Key extends MaybeNumber
 				? BaseType[number] | undefined
 				: Key extends keyof BaseType[number]
 					? BaseType[number]
 					: never
 			: BaseType extends readonly unknown[]
-				? ConsistsOnlyOf<Key, StringDigit> extends true
+				? Key extends MaybeNumber
 					? BaseType[number]
 					: never
-				: Key extends keyof WithStringKeys<BaseType>
-					? WithStringKeys<BaseType>[Key]
+				: Key extends keyof BaseType
+					? BaseType[Key]
 					: never;
 
-export type Get<BaseType, Path extends PropertyKey> = Path extends string
-	? GetWithPath<BaseType, ToPath<Path>>
-	: never;
+export type Get<BaseType, Path extends PropertyKey> = Path extends StringOrNumber ? GetWithPath<BaseType, ToPath<Path>> : never;

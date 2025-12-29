@@ -1,7 +1,5 @@
-import type { IsNever, UnionToIntersection, UnknownArray } from "type-fest";
-import type { BuildObject, ObjectValue,
-} from "type-fest/source/internal/object.d.ts";
-import type { BuildTuple } from "type-fest/source/internal/tuple.d.ts";
+import type { IsNever, TupleOf, UnionToIntersection, UnknownArray } from "type-fest";
+import type { BuildObject, ObjectValue } from "type-fest/source/internal/index.d.ts";
 import type { ExtendedPrimitive } from "../index.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
@@ -66,12 +64,12 @@ type PickDeepArray<
 				: never
 		: ArrayType extends unknown[]
 			? [
-					...BuildTuple<ArrayIndex>,
+					...TupleOf<ArrayIndex>,
 					InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
 				]
 			: ArrayType extends readonly unknown[]
 				? readonly [
-					...BuildTuple<ArrayIndex>,
+					...TupleOf<ArrayIndex>,
 					InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
 				]
 				: never
@@ -79,8 +77,8 @@ type PickDeepArray<
 		? number extends ArrayIndex
 			? ArrayType
 			: ArrayType extends unknown[]
-				? [...BuildTuple<ArrayIndex>, ArrayType[ArrayIndex]]
+				? [...TupleOf<ArrayIndex>, ArrayType[ArrayIndex]]
 				: ArrayType extends readonly unknown[]
-					? readonly [...BuildTuple<ArrayIndex>, ArrayType[ArrayIndex]]
+					? readonly [...TupleOf<ArrayIndex>, ArrayType[ArrayIndex]]
 					: never
 		: Array<InternalPickDeep<NonNullable<ArrayType[number]>, P>>;

@@ -1,4 +1,5 @@
-import type { ArrayOperator, Flatten } from "mongodb";
+import type { ArrayOperator } from "./array.ts";
+import type { Flatten } from "./flatten.ts";
 import type { Get } from "./get.ts";
 import type { PathsOfType } from "./path-of-type.ts";
 

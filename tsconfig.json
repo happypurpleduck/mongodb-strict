@@ -18,12 +18,13 @@
 		"noUnusedParameters": false,
 		"declaration": true,
 		"noEmit": true,
+		"sourceMap": true,
 		"forceConsistentCasingInFileNames": true,
 		"isolatedDeclarations": true,
 		"isolatedModules": true,
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true
 	},
-	"include": ["src", "extra/aggregate.ts", "extra/aggregate.ts", "extra/collection.ts", "extra/collection.ts", "extra/document.ts"],
+	"include": ["src", "extra/aggregate.ts", "extra/aggregate.ts", "extra/collection.ts", "extra/collection.ts", "extra/document.ts", "tsdown.config.ts", "setupVitest.ts"],
 	"exclude": ["playground"]
 }
