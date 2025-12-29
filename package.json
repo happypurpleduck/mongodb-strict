@@ -1,26 +1,15 @@
 {
 	"name": "@purpleduck/mongodb-strict",
-	"version": "0.0.3",
-	"module": "./dist/index.js",
-	"devDependencies": {
-		"@antfu/eslint-config": "^6.0.0",
-		"@ark/attest": "^0.51.0",
-		"@faker-js/faker": "^10.1.0",
-		"@types/bun": "1.3.0",
-		"eslint": "^9.38.0",
-		"eslint-plugin-format": "^1.0.2",
-		"prettier": "^3.7.4",
-		"tsdown": "^0.15.9",
-		"type-fest": "^5.3.1",
-		"typescript": "^5.9.3",
-		"vitest": "^4.0.1"
-	},
+	"type": "module",
+	"version": "0.1.0",
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
 		}
 	},
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"files": [
 		"README.md",
 		"dist"
@@ -33,18 +22,29 @@
 		"test": "vitest --typecheck",
 		"bench": "node bench.ts",
 		"lint": "eslint src --fix",
-		"build": "tsdown --dts"
+		"build": "tsdown"
 	},
 	"trustedDependencies": [
 		"esbuild",
 		"unrs-resolver"
 	],
-	"type": "module",
-	"types": "./dist/index.d.ts",
 	"volta": {
 		"node": "24.7.0"
 	},
-	"dependencies": {
-		"mongodb": "^7.0.0"
+	"peerDependencies": {
+		"mongodb": "^6.0.0 || ^7.0.0"
+	},
+	"devDependencies": {
+		"@antfu/eslint-config": "^6.0.0",
+		"@ark/attest": "^0.56.0",
+		"@faker-js/faker": "^10.1.0",
+		"@types/bun": "1.3.5",
+		"eslint": "^9.38.0",
+		"eslint-plugin-format": "^1.0.2",
+		"prettier": "^3.7.4",
+		"tsdown": "^0.18.3",
+		"type-fest": "^5.3.1",
+		"typescript": "^5.9.3",
+		"vitest": "^4.0.1"
 	}
 }
