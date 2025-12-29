@@ -14,6 +14,17 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 	x: 5 | 10;
 	y: 10;
 	tag: [string, number];
+	location:
+		| {
+			type: "direct";
+			latitude: number;
+			longitude: number;
+		}
+		| {
+			type: "indirect";
+			latitude: number;
+			longitude: number;
+		};
 	options: Array<{
 		name: {
 			en: string;
@@ -33,6 +44,17 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 	tag: [string, number];
 	x: 5 | 10;
 	y: 10;
+	location:
+		| {
+			type: "direct";
+			latitude: number;
+			longitude: number;
+		}
+		| {
+			type: "indirect";
+			latitude: number;
+			longitude: number;
+		};
 	options: Array<{
 		name: {
 			en: string;
@@ -54,6 +76,17 @@ expectTypeOf<
 	tag: [string, number];
 	x: 5 | 10;
 	y: 10;
+	location:
+		| {
+			type: "direct";
+			latitude: number;
+			longitude: number;
+		}
+		| {
+			type: "indirect";
+			latitude: number;
+			longitude: number;
+		};
 	options: Array<{
 		name: {
 			ar: string;

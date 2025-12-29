@@ -14,7 +14,10 @@ describe("buildDotObject type", () => {
 		attest({} as BuildDotObject<{ "a.b": string; "a.c": number; "d.e.f": boolean }>)
 			.type
 			.toString
-			.snap("{ a: { b: string } } & { a: { c: number } } & {\n  d: { \"e.f\": boolean }\n}");
+			.snap(`{
+  a: { b: string; c: number }
+  d: { e: { f: boolean } }
+}`);
 	});
 
 	it("handles empty object", () => {

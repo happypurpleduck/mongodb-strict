@@ -13,6 +13,10 @@ expectTypeOf<Paths<TItem>>().toEqualTypeOf<
 	| "tag"
 	| "tag.0"
 	| "tag.1"
+	| "location"
+	| "location.type"
+	| "location.latitude"
+	| "location.longitude"
 	| "options"
 	| `options.${number}`
 	| "options.name"
