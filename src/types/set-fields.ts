@@ -1,4 +1,5 @@
-import type { AddToSetOperators, Flatten } from "mongodb";
+import type { AddToSetOperators } from "./add-to-set.ts";
+import type { Flatten } from "./flatten.ts";
 import type { Get } from "./get.ts";
 import type { PathOfType } from "./path-of-type.ts";
 

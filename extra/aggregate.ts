@@ -1,22 +1,20 @@
+/** eslint-disable style/operator-linebreak */
+
 import type { AggregateOptions, Collection, NumericType } from "mongodb";
 import type { Except } from "type-fest";
-import type { BuildDotObject } from "./types/build-dot-object.ts";
-import type {
-	Filter,
-	LiteralsFilter,
-	LiteralsFilterType,
-} from "./types/filter.ts";
-import type { Get } from "./types/get.ts";
-import type { OmitDeep } from "./types/omit-deep.ts";
-import type { PathOfType, PathsOfType } from "./types/path-of-type.ts";
-import type { Paths } from "./types/path.ts";
+import type { BuildDotObject } from "../src/types/build-dot-object.ts";
+import type { Filter } from "../src/types/filter.ts";
+import type { Get } from "../src/types/get.ts";
+import type { OmitDeep } from "../src/types/omit-deep.ts";
+import type { PathOfType, PathsOfType } from "../src/types/path-of-type.ts";
+import type { Paths } from "../src/types/path.ts";
 import type {
 	Projection,
 	ProjectionPipeline,
 	ProjectionPipelineType,
 	ProjectionType,
-} from "./types/project.ts";
-import type { Singular } from "./types/singular.ts";
+} from "../src/types/project.ts";
+import type { Singular } from "../src/types/singular.ts";
 
 export type InferAggregateType<T extends Aggregate<any>> = T["~type"];
 
@@ -47,20 +45,18 @@ export class Aggregate<T> {
 		return this;
 	}
 
-	unionMatch<const TFilter extends LiteralsFilter<T>>(match: TFilter) {
-		this.pipeline.push({
-			$match: match,
-		});
+	// unionMatch<const TFilter extends LiteralsFilter<T>>(match: TFilter) {
+	// 	this.pipeline.push({
+	// 		$match: match,
+	// 	});
 
-		return this as unknown as Aggregate<T & LiteralsFilterType<T, TFilter>>;
-	}
+	// 	return this as unknown as Aggregate<T & LiteralsFilterType<T, TFilter>>;
+	// }
 
 	// TODO:
-	sort(
-		sort: {
-			[K in Paths<T>]?: -1 | 1;
-		},
-	): this {
+	sort(sort: {
+		[K in Paths<T>]?: -1 | 1;
+	}): this {
 		this.pipeline.push({ $sort: sort });
 
 		return this;
@@ -87,7 +83,7 @@ export class Aggregate<T> {
 		(TField extends keyof T ? Except<T, TField> : T) & {
 			[K in TField]: TResult[];
 		}
-		> {
+	> {
 		this.pipeline.push({
 			$lookup: {
 				from: lookup.from.collectionName,
@@ -115,8 +111,8 @@ export class Aggregate<T> {
 		this.pipeline.push({ $unwind: unwind });
 
 		return this as unknown as Aggregate<
-			Except<T, TUnwrap> &
-			Record<
+			Except<T, TUnwrap>
+			& Record<
 				TUnwrap,
 				// @ts-expect-error
 				T[TUnwrap][number]
@@ -257,8 +253,8 @@ export class Aggregate<T> {
 
 		return this as unknown as Aggregate<
 			// TODO: this probably does not need OmitDeep
-			OmitDeep<T, keyof TFields> &
-			BuildDotObject<ProjectionPipelineType<T, TFields>>
+			OmitDeep<T, keyof TFields>
+			& BuildDotObject<ProjectionPipelineType<T, TFields>>
 		>;
 	}
 
@@ -274,12 +270,12 @@ export class Aggregate<T> {
 		return this as unknown as Aggregate<Get<T, TField>>;
 	}
 
-	next(): Promise<T | null> {
+	async next(): Promise<T | null> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).next();
 	}
 
-	toArray(): Promise<T[]> {
+	async toArray(): Promise<T[]> {
 		// @ts-expect-error
 		return this.collection.aggregate<T>(this.pipeline, this.options).toArray();
 	}

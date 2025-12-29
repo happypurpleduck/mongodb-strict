@@ -1,18 +1,6 @@
-import type {
-	ArraySplice,
-	IsEqual,
-	IsNever,
-	SimplifyDeep,
-	UnionToTuple,
-	UnknownArray,
-} from "type-fest";
-import type {
-	IsArrayReadonly,
-	SetArrayAccess,
-} from "type-fest/source/internal/array.d.ts";
-import type { ExactKey } from "type-fest/source/internal/keys.d.ts";
-import type { ToString } from "type-fest/source/internal/string.d.ts";
-import type { ExtendedPrimitive } from "./primitives.ts";
+import type { ArraySplice, IsEqual, IsNever, SimplifyDeep, UnionToTuple, UnknownArray } from "type-fest";
+import type { ExactKey, IsArrayReadonly, SetArrayAccess, ToString } from "type-fest/source/internal/index.d.ts";
+import type { ExtendedPrimitive } from "../index.ts";
 
 export type OmitDeep<T, PathUnion> = SimplifyDeep<
 	OmitDeepHelper<T, UnionToTuple<PathUnion>>,
@@ -37,25 +25,37 @@ type OmitDeepWithOnePath<
 			? OmitDeepObjectWithOnePath<T, Path>
 			: T;
 
+// Optimized array path parsing with reduced template literal complexity
 type OmitDeepArrayWithOnePath<
 	ArrayType extends UnknownArray,
 	P extends string | number,
-> = P extends `${infer ArrayIndex extends number}.${infer SubPath}`
-	? number extends ArrayIndex
-		? Array<OmitDeepWithOnePath<NonNullable<ArrayType[number]>, SubPath>>
-		: ArraySplice<
-			ArrayType,
-			ArrayIndex,
-			1,
-			[OmitDeepWithOnePath<NonNullable<ArrayType[ArrayIndex]>, SubPath>]
-		>
-	: P extends `${infer ArrayIndex extends number}`
-		? number extends ArrayIndex
-			? []
-			: ArraySplice<ArrayType, ArrayIndex, 1, [unknown]>
+> = P extends `${number}.${string}`
+	? P extends `${infer ArrayIndex}.${infer SubPath}`
+		? ArrayIndex extends `${number}`
+			? number extends ParseInt<ArrayIndex>
+				? Array<OmitDeepWithOnePath<NonNullable<ArrayType[number]>, SubPath>>
+				: ArraySplice<
+					ArrayType,
+					ParseInt<ArrayIndex>,
+					1,
+					[OmitDeepWithOnePath<NonNullable<ArrayType[ParseInt<ArrayIndex>]>, SubPath>]
+				>
+			: ArrayType
+		: ArrayType
+	: P extends `${number}`
+		? P extends `${infer ArrayIndex}`
+			? ArrayIndex extends `${number}`
+				? number extends ParseInt<ArrayIndex>
+					? []
+					: ArraySplice<ArrayType, ParseInt<ArrayIndex>, 1, [unknown]>
+				: ArrayType
+			: ArrayType
 		: P extends string
 			? Array<OmitDeepWithOnePath<NonNullable<ArrayType[number]>, P>>
 			: ArrayType;
+
+// Helper type to parse string to number more efficiently
+type ParseInt<S extends string> = S extends `${infer N extends number}` ? N : never;
 
 type OmitDeepObjectWithOnePath<
 	ObjectT extends object,

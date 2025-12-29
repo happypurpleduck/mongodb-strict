@@ -13,10 +13,19 @@ expectTypeOf<Get<TItem, "options">>().toEqualTypeOf<TItem["options"]>();
 expectTypeOf<Get<TItem, "options.0">>().toEqualTypeOf<
 	TItem["options"][0] | undefined
 >();
+expectTypeOf<Get<TItem, `options.${number}`>>().toEqualTypeOf<
+	TItem["options"][0] | undefined
+>();
 expectTypeOf<Get<TItem, "options.0.name">>().toEqualTypeOf<
 	TItem["options"][0]["name"] | undefined
 >();
 expectTypeOf<Get<TItem, "options.0.name.en">>().toEqualTypeOf<
+	TItem["options"][0]["name"]["en"] | undefined
+>();
+expectTypeOf<Get<TItem, `options.${number}`>>().toEqualTypeOf<
+	TItem["options"][0] | undefined
+>();
+expectTypeOf<Get<TItem, `options.${number}.name.en`>>().toEqualTypeOf<
 	TItem["options"][0]["name"]["en"] | undefined
 >();
 expectTypeOf<Get<TItem, "options.name">>().toEqualTypeOf<

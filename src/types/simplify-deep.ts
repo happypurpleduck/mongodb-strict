@@ -1,5 +1,5 @@
 import type { IsTuple } from "type-fest";
-import type { ExtendedPrimitive } from "./primitives.ts";
+import type { ExtendedPrimitive } from "../index.ts";
 
 export type SimplifyDeep<Type, ExcludeType = never> = Type extends
 	| ExtendedPrimitive

@@ -1,30 +1,23 @@
-import type { IsNever, UnionToIntersection, UnknownArray } from "type-fest";
-import type {
-	BuildObject,
-	ObjectValue,
-} from "type-fest/source/internal/object.d.ts";
-import type { BuildTuple } from "type-fest/source/internal/tuple.d.ts";
-import type { ExtendedPrimitive } from "./primitives.ts";
+import type { IsNever, TupleOf, UnionToIntersection, UnknownArray } from "type-fest";
+import type { BuildObject, ObjectValue } from "type-fest/source/internal/index.d.ts";
+import type { ExtendedPrimitive } from "../index.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
+
+// Optimized version that computes UnionToIntersection once
+type PickDeepUnion<T, PathUnion extends string> = UnionToIntersection<
+	{
+		[P in PathUnion]: InternalPickDeep<T, P>;
+	}[PathUnion]
+>;
 
 export type PickDeep<T, PathUnion extends string> = [PathUnion] extends [never]
 	? {}
 	: T extends ExtendedPrimitive
 		? never
 		: T extends UnknownArray
-			? UnionToIntersection<
-				{
-					[P in PathUnion]: InternalPickDeep<T, P>;
-				}[PathUnion]
-			>
+			? PickDeepUnion<T, PathUnion>
 			: T extends object
-				? SimplifyDeep<
-					UnionToIntersection<
-						{
-							[P in PathUnion]: InternalPickDeep<T, P>;
-						}[PathUnion]
-					>
-				>
+				? SimplifyDeep<PickDeepUnion<T, PathUnion>>
 				: never;
 
 type InternalPickDeep<
@@ -71,12 +64,12 @@ type PickDeepArray<
 				: never
 		: ArrayType extends unknown[]
 			? [
-					...BuildTuple<ArrayIndex>,
+					...TupleOf<ArrayIndex>,
 					InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
 				]
 			: ArrayType extends readonly unknown[]
 				? readonly [
-					...BuildTuple<ArrayIndex>,
+					...TupleOf<ArrayIndex>,
 					InternalPickDeep<NonNullable<ArrayType[ArrayIndex]>, SubPath>,
 				]
 				: never
@@ -84,8 +77,8 @@ type PickDeepArray<
 		? number extends ArrayIndex
 			? ArrayType
 			: ArrayType extends unknown[]
-				? [...BuildTuple<ArrayIndex>, ArrayType[ArrayIndex]]
+				? [...TupleOf<ArrayIndex>, ArrayType[ArrayIndex]]
 				: ArrayType extends readonly unknown[]
-					? readonly [...BuildTuple<ArrayIndex>, ArrayType[ArrayIndex]]
+					? readonly [...TupleOf<ArrayIndex>, ArrayType[ArrayIndex]]
 					: never
 		: Array<InternalPickDeep<NonNullable<ArrayType[number]>, P>>;

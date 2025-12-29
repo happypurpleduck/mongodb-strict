@@ -5,8 +5,15 @@ export default antfu({
 
 	type: "lib",
 
-	typescript: true,
+	typescript: {
+		tsconfigPath: "./tsconfig.json",
+		parserOptions: {
+			projectService: true,
+			tsconfigRootDir: import.meta.dirname,
+		},
+	},
 
+	formatters: true,
 	stylistic: {
 		semi: true,
 		indent: "tab",
