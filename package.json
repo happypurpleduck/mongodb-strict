@@ -1,7 +1,7 @@
 {
 	"name": "@purpleduck/mongodb-strict",
 	"type": "module",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"exports": {
 		".": "./dist/index.mjs",
 		"./package.json": "./package.json"
@@ -28,7 +28,7 @@
 		"unrs-resolver"
 	],
 	"volta": {
-		"node": "24.7.0"
+		"node": "24.12.0"
 	},
 	"peerDependencies": {
 		"mongodb": "^6.0.0 || ^7.0.0"
