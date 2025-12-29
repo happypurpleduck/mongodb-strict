@@ -3,16 +3,16 @@ import { bench } from "@ark/attest";
 
 bench("Singular with number array", () => {
 	return {} as Singular<number[]>;
-}).types([11, "instantiations"]);
+}).types([7, "instantiations"]);
 
 bench("Singular with primitive", () => {
 	return {} as Singular<number>;
-}).types([6, "instantiations"]);
+}).types([4, "instantiations"]);
 
 bench("Singular with string array", () => {
 	return {} as Singular<string[]>;
-}).types([11, "instantiations"]);
+}).types([7, "instantiations"]);
 
 bench("Singular with object array", () => {
 	return {} as Singular<{ id: number; name: string }[]>;
-}).types([15, "instantiations"]);
+}).types([11, "instantiations"]);

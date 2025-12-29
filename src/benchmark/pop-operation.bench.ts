@@ -3,16 +3,16 @@ import { bench } from "@ark/attest";
 
 bench("PopOperation with simple arrays", () => {
 	return {} as PopOperation<{ a: number[]; b: string }>;
-}).types([5352, "instantiations"]);
+}).types([1551, "instantiations"]);
 
 bench("PopOperation with nested arrays", () => {
 	return {} as PopOperation<{ a: { b: number[] } }>;
-}).types([5902, "instantiations"]);
+}).types([1641, "instantiations"]);
 
 bench("PopOperation with multiple arrays", () => {
 	return {} as PopOperation<{ a: number[]; b: string[]; c: boolean }>;
-}).types([6101, "instantiations"]);
+}).types([1747, "instantiations"]);
 
 bench("PopOperation with no arrays", () => {
 	return {} as PopOperation<{ a: number; b: string }>;
-}).types([3710, "instantiations"]);
+}).types([1401, "instantiations"]);

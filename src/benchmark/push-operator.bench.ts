@@ -3,16 +3,16 @@ import { bench } from "@ark/attest";
 
 bench("PushOperator with simple arrays", () => {
 	return {} as PushOperator<{ a: number[]; b: string }>;
-}).types([5367, "instantiations"]);
+}).types([1565, "instantiations"]);
 
 bench("PushOperator with nested arrays", () => {
 	return {} as PushOperator<{ a: { b: number[] } }>;
-}).types([5917, "instantiations"]);
+}).types([1655, "instantiations"]);
 
 bench("PushOperator with object arrays", () => {
 	return {} as PushOperator<{ a: { id: number; name: string }[] }>;
-}).types([6461, "instantiations"]);
+}).types([1909, "instantiations"]);
 
 bench("PushOperator with no arrays", () => {
 	return {} as PushOperator<{ a: number; b: string }>;
-}).types([3725, "instantiations"]);
+}).types([1415, "instantiations"]);

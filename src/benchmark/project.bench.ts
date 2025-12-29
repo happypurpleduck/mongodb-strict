@@ -4,20 +4,20 @@ import { bench } from "@ark/attest";
 
 bench("Projection with simple object", () => {
 	return {} as Projection<TOrder>;
-}).types([806, "instantiations"]);
+}).types([1036, "instantiations"]);
 
 bench("ProjectionType with inclusion", () => {
 	return {} as ProjectionType<TOrder, { a: 1 }>;
-}).types([2883, "instantiations"]);
+}).types([3917, "instantiations"]);
 
 bench("ProjectionType with exclusion", () => {
 	return {} as ProjectionType<TOrder, { b: 0 }>;
-}).types([2805, "instantiations"]);
+}).types([3773, "instantiations"]);
 
 bench("ProjectionType with exclusion", () => {
 	return {} as ProjectionType<TOrder, { b: 0 }>;
-}).types([2805, "instantiations"]);
+}).types([3773, "instantiations"]);
 
 bench("ProjectionType with undefined", () => {
 	return {} as ProjectionType<TOrder, undefined>;
-}).types([822, "instantiations"]);
+}).types([1005, "instantiations"]);

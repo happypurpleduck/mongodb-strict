@@ -3,11 +3,11 @@ import { bench } from "@ark/attest";
 
 bench("SimplifyDeep with nested object", () => {
 	return {} as SimplifyDeep<{ a: { b: number } }>;
-}).types([237, "instantiations"]);
+}).types([25, "instantiations"]);
 
 bench("SimplifyDeep with array", () => {
 	return {} as SimplifyDeep<{ a: number[] }>;
-}).types([237, "instantiations"]);
+}).types([25, "instantiations"]);
 
 bench("SimplifyDeep with primitive", () => {
 	return {} as SimplifyDeep<number>;
@@ -15,4 +15,4 @@ bench("SimplifyDeep with primitive", () => {
 
 bench("SimplifyDeep with complex structure", () => {
 	return {} as SimplifyDeep<{ a: { b: { c: number[] } } }>;
-}).types([237, "instantiations"]);
+}).types([25, "instantiations"]);

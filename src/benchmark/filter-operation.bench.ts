@@ -15,4 +15,4 @@ bench("FilterOperations with primitive", () => {
 
 bench("FilterOperations with array", () => {
 	return {} as FilterOperations<number[]>;
-}).types([22, "instantiations"]);
+}).types([18, "instantiations"]);

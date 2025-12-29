@@ -25,6 +25,6 @@
 		"verbatimModuleSyntax": true,
 		"skipLibCheck": true
 	},
-	"include": ["src", "extra/aggregate.ts", "extra/aggregate.ts", "extra/collection.ts", "extra/collection.ts", "extra/document.ts", "tsdown.config.ts", "setupVitest.ts"],
+	"include": ["src", "extra/aggregate.ts", "extra/aggregate.ts", "extra/collection.ts", "extra/collection.ts", "extra/document.ts", "tsdown.config.ts", "setupVitest.ts", "bench.ts"],
 	"exclude": ["playground"]
 }

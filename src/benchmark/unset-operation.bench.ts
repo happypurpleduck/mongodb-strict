@@ -3,16 +3,16 @@ import { bench } from "@ark/attest";
 
 bench("UnsetOperation with simple object", () => {
 	return {} as UnsetOperation<{ a: number; b: string }>;
-}).types([2945, "instantiations"]);
+}).types([624, "instantiations"]);
 
 bench("UnsetOperation with nested object", () => {
 	return {} as UnsetOperation<{ a: { b: number } }>;
-}).types([4251, "instantiations"]);
+}).types([667, "instantiations"]);
 
 bench("UnsetOperation with arrays", () => {
 	return {} as UnsetOperation<{ a: number[] }>;
-}).types([4378, "instantiations"]);
+}).types([684, "instantiations"]);
 
 bench("UnsetOperation with empty object", () => {
 	return {} as UnsetOperation<{}>;
-}).types([2874, "instantiations"]);
+}).types([550, "instantiations"]);

@@ -4,11 +4,11 @@ import { bench } from "@ark/attest";
 
 bench("Filter simple object", () => {
 	return {} as Filter<{ a: number; b: string }>;
-}).types([5253, "instantiations"]);
+}).types([676, "instantiations"]);
 
 bench("Filter with literals", () => {
 	return {} as Filter<{ status: "active" | "inactive"; count: number }>;
-}).types([52363, "instantiations"]);
+}).types([677, "instantiations"]);
 
 bench("Filter meaningful object", () => {
 	return {} as Filter<{
@@ -16,7 +16,7 @@ bench("Filter meaningful object", () => {
 		tags: string[];
 		metadata: { created: Date; updated: Date };
 	}>;
-}).types([7574, "instantiations"]);
+}).types([1131, "instantiations"]);
 
 bench("Filter meaningfully complex object", () => {
 	return {} as Filter<{
@@ -34,7 +34,7 @@ bench("Filter meaningfully complex object", () => {
 			updated: Date;
 		};
 	}>;
-}).types([9203, "instantiations"]);
+}).types([1606, "instantiations"]);
 
 bench("Filter quite nested objects", () => {
 	return {} as Filter<{
@@ -105,7 +105,7 @@ bench("Filter quite nested objects", () => {
 			};
 		};
 	}>;
-}).types([31383, "instantiations"]);
+}).types([2783, "instantiations"]);
 
 bench("Filter very multiple nested objects", () => {
 	return {} as Filter<{
@@ -256,4 +256,4 @@ bench("Filter very multiple nested objects", () => {
 			};
 		};
 	}>;
-}).types([41335, "instantiations"]);
+}).types([3896, "instantiations"]);
