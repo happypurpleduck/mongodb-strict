@@ -7,6 +7,7 @@ const config: UserConfig = defineConfig({
 		resolve: [/^type-fest/],
 	},
 	clean: true,
+	exports: true,
 });
 
 export default config;
