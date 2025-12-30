@@ -14,5 +14,5 @@ bench("BuildDotObject with deep nesting", () => {
 }).types([109, "instantiations"]);
 
 bench("BuildDotObject with empty object", () => {
-	return {} as BuildDotObject<{}>;
+	return {} as BuildDotObject<Record<never, never>>;
 }).types([10, "instantiations"]);

@@ -14,5 +14,5 @@ bench("NotAcceptedFields with arrays", () => {
 }).types([1554, "instantiations"]);
 
 bench("NotAcceptedFields with empty object", () => {
-	return {} as NotAcceptedFields<{}, number>;
+	return {} as NotAcceptedFields<Record<never, never>, number>;
 }).types([1258, "instantiations"]);

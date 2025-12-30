@@ -3,14 +3,13 @@ import type { BuildObject, ObjectValue } from "type-fest/source/internal/index.d
 import type { ExtendedPrimitive } from "../index.ts";
 import type { SimplifyDeep } from "./simplify-deep.ts";
 
-// Optimized version that computes UnionToIntersection once
-type PickDeepUnion<T, PathUnion extends string> = UnionToIntersection<
+type PickDeepUnion<T, PathUnion extends PropertyKey> = UnionToIntersection<
 	{
 		[P in PathUnion]: InternalPickDeep<T, P>;
 	}[PathUnion]
 >;
 
-export type PickDeep<T, PathUnion extends string> = [PathUnion] extends [never]
+export type PickDeep<T, PathUnion extends PropertyKey> = [PathUnion] extends [never]
 	? {}
 	: T extends ExtendedPrimitive
 		? never
@@ -22,7 +21,7 @@ export type PickDeep<T, PathUnion extends string> = [PathUnion] extends [never]
 
 type InternalPickDeep<
 	T,
-	Path extends string | number,
+	Path extends PropertyKey,
 > = T extends ExtendedPrimitive
 	? never
 	: T extends UnknownArray
@@ -33,7 +32,7 @@ type InternalPickDeep<
 
 type PickDeepObject<
 	RecordType extends object,
-	P extends string | number,
+	P extends PropertyKey,
 > = P extends `${infer RecordKeyInPath}.${infer SubPath}`
 	? ObjectValue<RecordType, RecordKeyInPath> extends infer ObjectV
 		? IsNever<ObjectV> extends false
@@ -52,7 +51,7 @@ type PickDeepObject<
 
 type PickDeepArray<
 	ArrayType extends UnknownArray,
-	P extends string | number,
+	P extends PropertyKey,
 > = P extends `${infer ArrayIndex extends number}.${infer SubPath}`
 	? number extends ArrayIndex
 		? ArrayType extends unknown[]

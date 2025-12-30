@@ -11,7 +11,7 @@ describe("exactly type", () => {
 	});
 
 	it("works with empty objects", () => {
-		attest({} as Exactly<{}, {}>)
+		attest({} as Exactly<Record<never, never>, Record<never, never>>)
 			.type
 			.toString
 			.snap("Record<never, never>");

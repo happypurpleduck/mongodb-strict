@@ -3,16 +3,16 @@ import { bench } from "@ark/attest";
 
 bench("StrictMatchKeysAndValues with simple object", () => {
 	return {} as StrictMatchKeysAndValues<{ a: number; b: string }>;
-}).types([627, "instantiations"]);
+}).types([652, "instantiations"]);
 
 bench("StrictMatchKeysAndValues with nested object", () => {
 	return {} as StrictMatchKeysAndValues<{ a: { b: number } }>;
-}).types([670, "instantiations"]);
+}).types([700, "instantiations"]);
 
 bench("StrictMatchKeysAndValues with arrays", () => {
 	return {} as StrictMatchKeysAndValues<{ a: number[] }>;
-}).types([815, "instantiations"]);
+}).types([840, "instantiations"]);
 
 bench("StrictMatchKeysAndValues with empty object", () => {
-	return {} as StrictMatchKeysAndValues<{}>;
-}).types([553, "instantiations"]);
+	return {} as StrictMatchKeysAndValues<Record<never, never>>;
+}).types([585, "instantiations"]);
