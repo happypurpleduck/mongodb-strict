@@ -105,7 +105,7 @@ bench("Filter quite nested objects", () => {
 			};
 		};
 	}>;
-}).types([2783, "instantiations"]);
+}).types([1308, "instantiations"]);
 
 bench("Filter very multiple nested objects", () => {
 	return {} as Filter<{
@@ -256,4 +256,4 @@ bench("Filter very multiple nested objects", () => {
 			};
 		};
 	}>;
-}).types([3896, "instantiations"]);
+}).types([1626, "instantiations"]);

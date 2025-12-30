@@ -177,3 +177,5 @@ dist
 tsconfig.vitest-temp.json
 
 .attest/
+
+src/pg.ts

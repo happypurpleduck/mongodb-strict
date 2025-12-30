@@ -1,6 +1,6 @@
 import type { Decimal128, ObjectId } from "mongodb";
 import type { OmitDeep } from "../types/omit-deep.ts";
-import type { TItem } from "./item.ts";
+import type { TItem, TOptions } from "./item.ts";
 import { expectTypeOf } from "vitest";
 
 expectTypeOf<OmitDeep<TItem, never>>().toEqualTypeOf<TItem>();
@@ -26,15 +26,7 @@ expectTypeOf<OmitDeep<TItem, "_id">>().toEqualTypeOf<{
 			latitude: number;
 			longitude: number;
 		};
-	options: Array<{
-		name: {
-			en: string;
-			ar: string;
-		};
-		price: Decimal128;
-		offerPrice: Decimal128 | null;
-		values: number[];
-	}>;
+	options: Array<TOptions>;
 }>();
 
 expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
@@ -57,15 +49,7 @@ expectTypeOf<OmitDeep<TItem, "_id" | "name.en">>().toEqualTypeOf<{
 			latitude: number;
 			longitude: number;
 		};
-	options: Array<{
-		name: {
-			en: string;
-			ar: string;
-		};
-		price: Decimal128;
-		offerPrice: Decimal128 | null;
-		values: number[];
-	}>;
+	options: Array<TOptions>;
 }>();
 
 expectTypeOf<
@@ -97,6 +81,7 @@ expectTypeOf<
 		price: Decimal128;
 		offerPrice: Decimal128 | null;
 		values: number[];
+		options: Array<TOptions>;
 	}>;
 }>();
 

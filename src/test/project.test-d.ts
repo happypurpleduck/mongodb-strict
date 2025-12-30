@@ -2,7 +2,7 @@ import type { Decimal128, ObjectId } from "mongodb";
 import type { Simplify } from "type-fest";
 import type { TDocument } from "../document.ts";
 import type { Projection, ProjectionType } from "../types/project.ts";
-import type { TItem } from "./item.ts";
+import type { TItem, TOptions } from "./item.ts";
 import { expectTypeOf } from "vitest";
 
 expectTypeOf<
@@ -97,15 +97,7 @@ expectTypeOf<ProjectionType<TItem, { "_id": 0; "name.en": 0 }>>().toEqualTypeOf<
 			latitude: number;
 			longitude: number;
 		};
-	options: Array<{
-		name: {
-			en: string;
-			ar: string;
-		};
-		price: Decimal128;
-		offerPrice: Decimal128 | null;
-		values: number[];
-	}>;
+	options: Array<TOptions>;
 }>();
 
 expectTypeOf<ProjectionType<TItem, { "name.en": 1 }>>().toEqualTypeOf<{

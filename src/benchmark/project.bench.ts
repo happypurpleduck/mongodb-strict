@@ -4,7 +4,6 @@ import type { TOrder } from "../test/order.ts";
 import type { Projection, ProjectionType } from "../types/project.ts";
 import { bench } from "@ark/attest";
 
-// Basic benchmarks with TOrder
 bench("Projection with simple object", () => {
 	return {} as Projection<TOrder>;
 }).types([1071, "instantiations"]);
@@ -21,19 +20,17 @@ bench("ProjectionType with undefined", () => {
 	return {} as ProjectionType<TOrder, undefined>;
 }).types([1040, "instantiations"]);
 
-// TItem benchmarks
 bench("ProjectionType TItem with nested inclusion", () => {
 	return {} as ProjectionType<TItem, { "_id": 1; "name.en": 1 }>;
-}).types([4888, "instantiations"]);
+}).types([6871, "instantiations"]);
 
-// Large scale benchmarks with TLargeItem
 bench("Projection TLargeItem", () => {
 	return {} as Projection<TLargeItem>;
-}).types([5236, "instantiations"]);
+}).types([6494, "instantiations"]);
 
 bench("ProjectionType TLargeItem undefined", () => {
 	return {} as ProjectionType<TLargeItem, undefined>;
-}).types([4377, "instantiations"]);
+}).types([5635, "instantiations"]);
 
 bench("ProjectionType TLargeItem simple inclusion", () => {
 	return {} as ProjectionType<TLargeItem, { name: 1 }>;

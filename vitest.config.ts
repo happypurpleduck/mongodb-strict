@@ -1,8 +1,9 @@
 import { defineConfig } from "vitest/config";
 
-export default defineConfig({
+export const config: ReturnType<typeof defineConfig> = defineConfig({
 	test: {
 		globalSetup: ["./setupVitest.ts"],
-
 	},
 });
+
+export default config;

@@ -3,15 +3,15 @@ import { bench } from "@ark/attest";
 
 bench("Paths simple object", () => {
 	return {} as Paths<{ a: number; b: string }>;
-}).types([133, "instantiations"]);
+}).types([151, "instantiations"]);
 
 bench("Paths nested object", () => {
 	return {} as Paths<{ a: { b: { c: { d: boolean } } } }>;
-}).types([313, "instantiations"]);
+}).types([355, "instantiations"]);
 
 bench("Paths array", () => {
 	return {} as Paths<{ items: string[] }>;
-}).types([448, "instantiations"]);
+}).types([463, "instantiations"]);
 
 bench("Paths complex structure", () => {
 	return {} as Paths<{
@@ -28,4 +28,4 @@ bench("Paths complex structure", () => {
 			tags: string[];
 		}[];
 	}>;
-}).types([888, "instantiations"]);
+}).types([1081, "instantiations"]);

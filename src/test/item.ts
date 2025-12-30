@@ -22,13 +22,16 @@ export interface TItem extends TDocument {
 			longitude: number;
 		};
 	properties: Record<string, string>;
-	options: Array<{
-		name: {
-			en: string;
-			ar: string;
-		};
-		price: Decimal128;
-		offerPrice: Decimal128 | null;
-		values: number[];
-	}>;
+	options: Array<TOptions>;
+}
+
+export interface TOptions {
+	name: {
+		en: string;
+		ar: string;
+	};
+	price: Decimal128;
+	offerPrice: Decimal128 | null;
+	values: number[];
+	options: Array<TOptions>;
 }
