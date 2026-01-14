@@ -5,6 +5,7 @@
 		"moduleDetection": "force",
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
+		"resolveJsonModule": true,
 		"allowImportingTsExtensions": true,
 		"strict": true,
 		"exactOptionalPropertyTypes": false,

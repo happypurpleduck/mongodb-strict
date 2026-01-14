@@ -4,11 +4,11 @@ export interface FilterOperators<TValue> {
 	$eq?: TValue;
 	$gt?: TValue;
 	$gte?: TValue;
-	$in?: Array<TValue>;
+	$in?: ReadonlyArray<TValue>;
 	$lt?: TValue;
 	$lte?: TValue;
 	$ne?: TValue;
-	$nin?: Array<TValue>;
+	$nin?: ReadonlyArray<TValue>;
 	// TODO: BSONRegExp?
 	$not?: TValue extends string
 		? FilterOperators<TValue> | RegExp
@@ -32,9 +32,9 @@ export interface FilterOperators<TValue> {
 	// $near?: Document;
 	// $nearSphere?: Document;
 	$maxDistance?: number;
-	$all?: Array<any>;
+	$all?: ReadonlyArray<any>;
 	// $elemMatch?: Document;
-	$size?: TValue extends Array<any> ? number : never;
+	$size?: TValue extends ReadonlyArray<any> ? number : never;
 	// $bitsAllClear?: BitwiseFilter;
 	// $bitsAllSet?: BitwiseFilter;
 	// $bitsAnyClear?: BitwiseFilter;

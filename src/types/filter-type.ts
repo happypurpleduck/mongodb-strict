@@ -2,10 +2,13 @@ import type { IsLiteral } from "type-fest";
 import type { BuildDotObject } from "./build-dot-object.ts";
 import type { Get } from "./get.ts";
 
-type IsLiteralOf<T, K extends PropertyKey> = IsLiteral<Get<T, K>>;
+type IsNullable<T> = null | undefined extends T ? 1 : 0;
+type IsLiteralOf<T, K extends PropertyKey> = Get<T, K> extends infer V
+	? (true extends IsLiteral<V> ? 1 : 0) | IsNullable<V>
+	: 0;
 
 export type LiteralsFilterType<T, Filter> = BuildDotObject<{
-	[K in keyof Filter]: IsLiteralOf<T, K> extends true
+	[K in keyof Filter]: 1 extends IsLiteralOf<T, K>
 		? Record<K, LiteralFilterType<Get<T, K>, Filter[K]>>
 		: never;
 }[keyof Filter]>;
